@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>683480740903-jtoc6oe6jvl5gt59rvtsug3q4l0jigjh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.683480740903-jtoc6oe6jvl5gt59rvtsug3q4l0jigjh</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>683480740903-vcs0u0bcjhqiaram4h6s86mqjvgie89f.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDp14IBp66Zoo5RZV_Xe6jzFScmPhrHi4A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>683480740903</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>fefu.Roflanplanner</string>
+	<key>PROJECT_ID</key>
+	<string>test-calendar-241815</string>
+	<key>STORAGE_BUCKET</key>
+	<string>test-calendar-241815.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:683480740903:ios:b0734277c229602c</string>
+	<key>DATABASE_URL</key>
+	<string>https://test-calendar-241815.firebaseio.com</string>
+</dict>
+</plist>

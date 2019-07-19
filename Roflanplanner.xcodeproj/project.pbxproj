@@ -13,9 +13,13 @@
 		84CEA6A12236121F00890DD4 /* Roflanplanner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84CEA69F2236121F00890DD4 /* Roflanplanner.xcdatamodeld */; };
 		84CEA6A32236122100890DD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CEA6A22236122100890DD4 /* Assets.xcassets */; };
 		84CEA6A62236122100890DD4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84CEA6A42236122100890DD4 /* LaunchScreen.storyboard */; };
+		84FE8B9622DEC91400B28399 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84FE8B9522DEC91300B28399 /* GoogleService-Info.plist */; };
+		84FE8B9A22E0CAC300B28399 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FE8B9922E0CAC300B28399 /* Model.swift */; };
+		AADE7AEF5C7607B81834D63E /* Pods_Roflanplanner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B400062EEBDC84FCC3841556 /* Pods_Roflanplanner.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0D0E3542C902494637688832 /* Pods-Roflanplanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roflanplanner.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner.debug.xcconfig"; sourceTree = "<group>"; };
 		84CEA6952236121F00890DD4 /* Roflanplanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roflanplanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84CEA6982236121F00890DD4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84CEA69A2236121F00890DD4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -24,6 +28,10 @@
 		84CEA6A22236122100890DD4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84CEA6A52236122100890DD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84CEA6A72236122100890DD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84FE8B9522DEC91300B28399 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84FE8B9922E0CAC300B28399 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		B400062EEBDC84FCC3841556 /* Pods_Roflanplanner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Roflanplanner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E39D54E7B448506D5CB81458 /* Pods-Roflanplanner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roflanplanner.release.xcconfig"; path = "Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +39,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AADE7AEF5C7607B81834D63E /* Pods_Roflanplanner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4995267E354F5A8CA22BCDA8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B400062EEBDC84FCC3841556 /* Pods_Roflanplanner.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5259A817B62F09630EF2975F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0D0E3542C902494637688832 /* Pods-Roflanplanner.debug.xcconfig */,
+				E39D54E7B448506D5CB81458 /* Pods-Roflanplanner.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		84CEA68C2236121F00890DD4 = {
 			isa = PBXGroup;
 			children = (
 				84CEA6972236121F00890DD4 /* Roflanplanner */,
 				84CEA6962236121F00890DD4 /* Products */,
+				5259A817B62F09630EF2975F /* Pods */,
+				4995267E354F5A8CA22BCDA8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,10 +86,12 @@
 			children = (
 				84CEA6982236121F00890DD4 /* AppDelegate.swift */,
 				84CEA69A2236121F00890DD4 /* ViewController.swift */,
+				84FE8B9922E0CAC300B28399 /* Model.swift */,
 				84CEA69C2236121F00890DD4 /* Main.storyboard */,
 				84CEA6A22236122100890DD4 /* Assets.xcassets */,
 				84CEA6A42236122100890DD4 /* LaunchScreen.storyboard */,
 				84CEA6A72236122100890DD4 /* Info.plist */,
+				84FE8B9522DEC91300B28399 /* GoogleService-Info.plist */,
 				84CEA69F2236121F00890DD4 /* Roflanplanner.xcdatamodeld */,
 			);
 			path = Roflanplanner;
@@ -74,9 +104,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84CEA6AA2236122100890DD4 /* Build configuration list for PBXNativeTarget "Roflanplanner" */;
 			buildPhases = (
+				F24B07E4B22B7EF1CA56CAF2 /* [CP] Check Pods Manifest.lock */,
 				84CEA6912236121F00890DD4 /* Sources */,
 				84CEA6922236121F00890DD4 /* Frameworks */,
 				84CEA6932236121F00890DD4 /* Resources */,
+				920E9A2654E26CBBBC5D0B4A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -126,12 +158,64 @@
 			buildActionMask = 2147483647;
 			files = (
 				84CEA6A62236122100890DD4 /* LaunchScreen.storyboard in Resources */,
+				84FE8B9622DEC91400B28399 /* GoogleService-Info.plist in Resources */,
 				84CEA6A32236122100890DD4 /* Assets.xcassets in Resources */,
 				84CEA69E2236121F00890DD4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		920E9A2654E26CBBBC5D0B4A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CalendarKit/CalendarKit.framework",
+				"${BUILT_PRODUCTS_DIR}/DateToolsSwift/DateToolsSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/FSCalendar/FSCalendar.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/Neon/Neon.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CalendarKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DateToolsSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSCalendar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Neon.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F24B07E4B22B7EF1CA56CAF2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Roflanplanner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		84CEA6912236121F00890DD4 /* Sources */ = {
@@ -141,6 +225,7 @@
 				84CEA6A12236121F00890DD4 /* Roflanplanner.xcdatamodeld in Sources */,
 				84CEA69B2236121F00890DD4 /* ViewController.swift in Sources */,
 				84CEA6992236121F00890DD4 /* AppDelegate.swift in Sources */,
+				84FE8B9A22E0CAC300B28399 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +369,7 @@
 		};
 		84CEA6AB2236122100890DD4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D0E3542C902494637688832 /* Pods-Roflanplanner.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -296,12 +382,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fefu.Roflanplanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		84CEA6AC2236122100890DD4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E39D54E7B448506D5CB81458 /* Pods-Roflanplanner.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -314,7 +401,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = fefu.Roflanplanner;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
