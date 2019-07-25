@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
+    var data = Data()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +54,14 @@ extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
 
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         return Int.random(in: 1..<10)
+    }
+    
+    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
+        self.data.fetchEvents() {
+            self.tableView.reloadData()
+            self.calendar.reloadData()
+            print("reloaded")
+        }
     }
     
 }
@@ -99,10 +109,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         return UISwipeActionsConfiguration(actions: [TrashAction,FlagAction,MoreAction])
     }
     
-    func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        self.tableView.reloadData()
-        self.calendar.reloadData()
-    }
+
 
     
     

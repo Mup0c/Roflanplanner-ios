@@ -6,7 +6,7 @@ target 'Roflanplanner' do
   use_frameworks!
 
   # Pods for Roflanplanner
-pod 'Alamofire', '~> 5.0.0-beta.5'
+pod 'Alamofire', '~> 4.8.1'
 pod 'FSCalendar'
 pod 'Firebase/Analytics'
 pod 'CalendarKit'

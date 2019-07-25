@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (5.0.0-beta.5)
+  - Alamofire (4.8.2)
   - CalendarKit (0.6.0):
     - DateToolsSwift
     - Neon
@@ -60,7 +60,7 @@ PODS:
   - Neon (0.4.0)
 
 DEPENDENCIES:
-  - Alamofire (~> 5.0.0-beta.5)
+  - Alamofire (~> 4.8.1)
   - CalendarKit
   - Firebase/Analytics
   - FSCalendar
@@ -81,7 +81,7 @@ SPEC REPOS:
     - Neon
 
 SPEC CHECKSUMS:
-  Alamofire: 9afb08f7f43efcc71c072374e720fcf67521317d
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   CalendarKit: ef7788f69da834471b5f20d87aa7ca1116fbd775
   DateToolsSwift: 875d97ff9e3a5d54abdd67a269b3f51c757b71ab
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
@@ -94,6 +94,6 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Neon: 7fb5a9327e7e57911843f608e08f4893a74deaf9
 
-PODFILE CHECKSUM: c9b1b95f2a65af2abc00708ea25c6305edb5d505
+PODFILE CHECKSUM: a64efb9440da3eb63668de4be3c51d3f3925c827
 
 COCOAPODS: 1.5.3
