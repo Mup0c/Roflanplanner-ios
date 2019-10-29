@@ -19,11 +19,41 @@ class ViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
+    var selectedDayInstances : [EventInstance]?
+
     var data = Data()
+    var refreshControl = UIRefreshControl()
+
+    @objc private func refreshData(_ sender: Any) {
+        self.data.fetchEvents() {
+            self.data.fetchInstances {
+                let date = self.calendar.selectedDate ?? self.calendar.today!
+                self.refreshSelectedDayInstances(date: date)
+                self.calendar.reloadData()
+                self.tableView.reloadData()
+
+                print("reloaded")
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
+    func refreshSelectedDayInstances(date: Date) {
+        calendar.setCurrentPage(date, animated: true)
+        let format = DateFormatter()
+        format.dateFormat = "yyyyMMdd"
+        let formattedDate = Int(format.string(from: date))!
+        self.selectedDayInstances = self.data.instanes[formattedDate]
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        //calendar.placeholderType = FSCalendarPlaceholderType.fillSixRows
+        //calendar.adjustsBoundingRectWhenChangingMonths=true
+        self.refreshData(self)
+        //calendar.adjustMonthPosition()
         // Do any additional setup after loading the view, typically from a nib.
         
         //let calendar = FSCalendar(frame: CGRect(x: 0, y: 0, width: 320, height: 300))
@@ -34,7 +64,6 @@ class ViewController: UIViewController {
 
     }
     
-
     @IBAction func clickedChangeView(_ sender: Any) {
         if calendar.scope == .month {
             calendar.setScope(.week, animated: true)
@@ -51,17 +80,23 @@ class ViewController: UIViewController {
 
 
 extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
-
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return Int.random(in: 1..<10)
+        
+        let format = DateFormatter()
+        format.dateFormat = "yyyyMMdd"
+        let formattedDate = Int(format.string(from: date))!
+        if let val = self.data.instanes[formattedDate] {
+            return val.count
+        }
+        return 0
     }
     
+    
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
-        self.data.fetchEvents() {
-            self.tableView.reloadData()
-            self.calendar.reloadData()
-            print("reloaded")
-        }
+        calendar.setCurrentPage(date, animated: true)
+        refreshSelectedDayInstances(date: date)
+        self.tableView.reloadData()
+
     }
     
 }
@@ -69,17 +104,25 @@ extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return Int.random(in: 1..<10)
+
+        if let val = self.selectedDayInstances {
+            return val.count
+        }
+        return 0
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath)
-        
-        
+        let instance = self.selectedDayInstances![indexPath.row]
+        let event = self.data.events[instance.event_id!]!
+        cell.textLabel?.text = event.name
+        cell.detailTextLabel?.text = event.details
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("show action ...")
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -87,26 +130,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
 
-        let TrashAction = UIContextualAction(style: .normal, title:  "Trash", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let TrashAction = UIContextualAction(style: .destructive, title:  "Trash", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("delete action ...")
             success(true)
         })
         TrashAction.backgroundColor = .red
         
-        let FlagAction = UIContextualAction(style: .normal, title:  "Flag", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            print("flag action ...")
+        let EditAction = UIContextualAction(style: .normal, title:  "Edit", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("edit action ...")
             success(true)
         })
-        FlagAction.backgroundColor = .orange
-        
-        let MoreAction = UIContextualAction(style: .normal, title:  "More", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            print("more action ...")
-            success(true)
-        })
-        MoreAction.backgroundColor = .gray
+        EditAction.backgroundColor = .orange
         
         
-        return UISwipeActionsConfiguration(actions: [TrashAction,FlagAction,MoreAction])
+        return UISwipeActionsConfiguration(actions: [TrashAction,EditAction])
     }
     
 
