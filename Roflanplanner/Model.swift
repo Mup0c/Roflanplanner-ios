@@ -30,8 +30,12 @@ class Data {
                 let data = jsonArray["data"] as! Array<[String: Any]>
                 self.events.removeAll()
                 for jsonEvent in data {
-                    let event = Event(json: jsonEvent)
+                    //let event = Event(json: jsonEvent)
+                    let jsonEvent = try! JSONSerialization.data(withJSONObject: jsonEvent)
+                    let decoder = JSONDecoder()
+                    let event = try! decoder.decode(Event.self, from: jsonEvent)
                     self.events[event.id!] = event
+                    //print(event.id)
                     //print("appended")
                 }
                 completion()
@@ -52,7 +56,10 @@ class Data {
                 let data = jsonArray["data"] as! Array<[String: Any]>
                 self.instanes.removeAll()
                 for jsonInstance in data {
-                    let instance = EventInstance(json: jsonInstance)
+                    //let instance = EventInstance(json: jsonInstance)
+                    let jsonInstance = try! JSONSerialization.data(withJSONObject: jsonInstance)
+                    let decoder = JSONDecoder()
+                    let instance = try! decoder.decode(EventInstance.self, from: jsonInstance)
                     let date = Date(timeIntervalSince1970: Double(instance.started_at!) / 1000)
                     let format = DateFormatter()
                     format.dateFormat = "yyyyMMdd"
@@ -76,7 +83,7 @@ class Data {
 }
 
 
-class Event {
+class Event : Codable {
     
     var created_at: Int64?
     var details: String?
@@ -87,37 +94,18 @@ class Event {
     var status: String?
     var updated_at: Int64?
     
-    init(json: [String: Any]) {
-        self.created_at = json["created_at"] as? Int64
-        self.details = json["details"] as? String
-        self.id = json["id"] as? Int64
-        self.location = json["location"] as? String
-        self.name = json["name"] as? String
-        self.owner_id = json["owner_id"] as? String
-        self.status = json["status"] as? String
-        self.updated_at = json["updated_at"] as? Int64
-        
-    }
-    
 }
 
-class EventInstance {
+class EventInstance : Codable{
     
     var event_id: Int64?
     var pattern_id: Int64?
     var started_at: Int64?
     var ended_at: Int64?
     
-    init(json: [String: Any]) {
-        self.event_id = json["event_id"] as? Int64
-        self.ended_at = json["ended_at"] as? Int64
-        self.pattern_id = json["pattern_id"] as? Int64
-        self.started_at = json["started_at"] as? Int64
-        
-    }
 }
 
-class EventPattern {
+class EventPattern : Codable {
     
     var created_at: Int64?
     var duration: Int64?
@@ -130,36 +118,39 @@ class EventPattern {
     var timezone: String?
     var updated_at: Int64?
     
-    init(json: [String: Any]) {
-        self.created_at = json["created_at"] as? Int64
-        self.duration = json["duration"] as? Int64
-        self.ended_at = json["ended_at"] as? Int64
-        self.event_id = json["event_id"] as? Int64
-        self.exrule = json["exrule"] as? String
-        self.id = json["id"] as? Int64
-        self.rrule = json["rrule"] as? String
-        self.started_at = json["started_at"] as? Int64
-        self.timezone = json["timezone"] as? String
-        self.updated_at = json["updated_at"] as? Int64
-        
-    }
-
-    
 }
 
 class Api {
     
+    static let baseUrl = "http://frrcode.com:9040/api/v1"
+    
     static func get(type: getType, completion: @escaping (Result<Any>) -> Void) {
-        var baseUrl = "http://frrcode.com:9040/api/v1"
+        var url = self.baseUrl
         switch type {
         case .events:
-            baseUrl += "/events"
+            url += "/events"
         case .instances:
-            baseUrl += "/events/instances"
+            url += "/events/instances"
         }
-        Alamofire.request(
-            baseUrl,
-            headers: ["X-Firebase-Auth": "tester"])
+        Alamofire.request(url, headers: ["X-Firebase-Auth": "tester"])
+            .validate()
+            .responseJSON() {  responseJSON in
+                switch responseJSON.result {
+                case .success(let value):
+                    completion(.success(value))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+        }
+    }
+    
+    static func patch(id: Int64, parameters: Parameters, completion: @escaping (Result<Any>) -> Void) {
+        var url = self.baseUrl
+        url += "/events"  //todo: switch
+        url += String(id)
+
+        Alamofire.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default,
+                          headers: ["X-Firebase-Auth": "tester"])
             .validate()
             .responseJSON() {  responseJSON in
                 switch responseJSON.result {

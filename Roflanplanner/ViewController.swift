@@ -17,10 +17,12 @@ class ViewController: UIViewController {
     //fileprivate weak var calendar: FSCalendar!
     @IBOutlet var calendarHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet var dayTable: UITableView!
     
     var selectedDayInstances : [EventInstance]?
-
+    var selectedEvent : Event!
+    var selectedInstance : EventInstance!
+    var willCreateNewEvent = false
     var data = Data()
     var refreshControl = UIRefreshControl()
 
@@ -30,7 +32,7 @@ class ViewController: UIViewController {
                 let date = self.calendar.selectedDate ?? self.calendar.today!
                 self.refreshSelectedDayInstances(date: date)
                 self.calendar.reloadData()
-                self.tableView.reloadData()
+                self.dayTable.reloadData()
 
                 print("reloaded")
                 self.refreshControl.endRefreshing()
@@ -49,7 +51,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
-        tableView.refreshControl = refreshControl
+        dayTable.refreshControl = refreshControl
         //calendar.placeholderType = FSCalendarPlaceholderType.fillSixRows
         //calendar.adjustsBoundingRectWhenChangingMonths=true
         self.refreshData(self)
@@ -72,9 +74,18 @@ class ViewController: UIViewController {
         }
     }
     
-    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
-        self.calendarHeightConstraint.constant = bounds.height
-        self.view.layoutIfNeeded()
+    @IBAction func clickedAddButton(_ sender: Any) {
+        print("create action...")
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toEventSegue" {
+            let navController = segue.destination as! UINavigationController
+            let eventTableView = navController.topViewController as! EventTableViewController
+            eventTableView.creatingNewEvent = willCreateNewEvent
+            //selectedEvent.details = "THIS is EvEnt details \n \n kek"
+            eventTableView.event = selectedEvent
+        }
     }
 }
 
@@ -94,9 +105,14 @@ extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
     
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         calendar.setCurrentPage(date, animated: true)
-        refreshSelectedDayInstances(date: date)
-        self.tableView.reloadData()
+        self.refreshSelectedDayInstances(date: date)
+        self.dayTable.reloadData()
 
+    }
+    
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+        self.calendarHeightConstraint.constant = bounds.height
+        self.view.layoutIfNeeded()
     }
     
 }
@@ -123,32 +139,29 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("show action ...")
+        
+        let instance = self.selectedDayInstances![indexPath.row]
+        self.selectedEvent = self.data.events[instance.event_id!]!
+        self.willCreateNewEvent = false
+        
+        performSegue(withIdentifier: "toEventSegue", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+        
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
 
         let TrashAction = UIContextualAction(style: .destructive, title:  "Trash", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("delete action ...")
-            success(true)
+            print(indexPath.row)
+            self.selectedDayInstances!.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            success(false)
         })
         TrashAction.backgroundColor = .red
         
-        let EditAction = UIContextualAction(style: .normal, title:  "Edit", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
-            print("edit action ...")
-            success(true)
-        })
-        EditAction.backgroundColor = .orange
-        
-        
-        return UISwipeActionsConfiguration(actions: [TrashAction,EditAction])
+        return UISwipeActionsConfiguration(actions: [TrashAction])
     }
-    
-
-
-    
-    
     
 }
