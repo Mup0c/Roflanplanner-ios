@@ -11,7 +11,7 @@ import FSCalendar
 import CalendarKit
 import Firebase
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet var calendar: FSCalendar!
     //fileprivate weak var calendar: FSCalendar!
@@ -20,22 +20,22 @@ class ViewController: UIViewController {
     @IBOutlet var dayTable: UITableView!
     
     var selectedDayInstances : [EventInstance]?
-    var selectedEvent : Event!
     var selectedInstance : EventInstance!
-    var willCreateNewEvent = false
     var data = Data()
     var refreshControl = UIRefreshControl()
 
-    @objc private func refreshData(_ sender: Any) {
+    @objc func refreshData() {
         self.data.fetchEvents() {
-            self.data.fetchInstances {
-                let date = self.calendar.selectedDate ?? self.calendar.today!
-                self.refreshSelectedDayInstances(date: date)
-                self.calendar.reloadData()
-                self.dayTable.reloadData()
+            self.data.fetchPatterns {
+                self.data.fetchInstances {
+                    let date = self.calendar.selectedDate ?? self.calendar.today!
+                    self.refreshSelectedDayInstances(date: date)
+                    self.calendar.reloadData()
+                    self.dayTable.reloadData()
 
-                print("reloaded")
-                self.refreshControl.endRefreshing()
+                    print("reloaded")
+                    self.refreshControl.endRefreshing()
+                }
             }
         }
     }
@@ -45,16 +45,17 @@ class ViewController: UIViewController {
         let format = DateFormatter()
         format.dateFormat = "yyyyMMdd"
         let formattedDate = Int(format.string(from: date))!
-        self.selectedDayInstances = self.data.instanes[formattedDate]
+        self.selectedDayInstances = self.data.instanes[formattedDate]?.sorted(by: { $0.started_at! < $1.started_at! })
+        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl.addTarget(self, action: #selector(refreshData(_:)), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         dayTable.refreshControl = refreshControl
         //calendar.placeholderType = FSCalendarPlaceholderType.fillSixRows
         //calendar.adjustsBoundingRectWhenChangingMonths=true
-        self.refreshData(self)
+        self.refreshData()
         //calendar.adjustMonthPosition()
         // Do any additional setup after loading the view, typically from a nib.
         
@@ -74,18 +75,32 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func clickedAddButton(_ sender: Any) {
-        print("create action...")
-    }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "toEventSegue" {
+            
+            segue.destination.presentationController?.delegate = self;
             let navController = segue.destination as! UINavigationController
             let eventTableView = navController.topViewController as! EventTableViewController
-            eventTableView.creatingNewEvent = willCreateNewEvent
-            //selectedEvent.details = "THIS is EvEnt details \n \n kek"
-            eventTableView.event = selectedEvent
+            eventTableView.event = self.data.events[self.selectedInstance.event_id!]!
+            eventTableView.pattern = self.data.patterns[self.selectedInstance.event_id!]!
+            
         }
+        
+        if segue.identifier == "toCreateSegue" {
+            
+            segue.destination.presentationController?.delegate = self;
+            print("create action...")
+
+        }
+        
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        
+        print("Dismissed")
+        self.refreshData()
+        
     }
 }
 
@@ -132,17 +147,18 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath)
         let instance = self.selectedDayInstances![indexPath.row]
         let event = self.data.events[instance.event_id!]!
-        cell.textLabel?.text = event.name
-        cell.detailTextLabel?.text = event.details
+        cell.detailTextLabel?.text = event.name
+        let from = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.started_at!) / 1000)
+        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.ended_at!) / 1000)
+        let duration = Date.duration(from: from, to: to)
+        cell.textLabel?.text = DateFormatter.localizedString(from: from, dateStyle: .none, timeStyle: .short) + " " + duration
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("show action ...")
         
-        let instance = self.selectedDayInstances![indexPath.row]
-        self.selectedEvent = self.data.events[instance.event_id!]!
-        self.willCreateNewEvent = false
+        self.selectedInstance = self.selectedDayInstances![indexPath.row]
         
         performSegue(withIdentifier: "toEventSegue", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
@@ -155,13 +171,37 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let TrashAction = UIContextualAction(style: .destructive, title:  "Trash", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("delete action ...")
             print(indexPath.row)
+            self.data.deleteEvent(eventInstance: self.selectedDayInstances![indexPath.row]) { 
+                self.refreshData()
+            }
             self.selectedDayInstances!.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
-            success(false)
+            success(true)
         })
         TrashAction.backgroundColor = .red
         
         return UISwipeActionsConfiguration(actions: [TrashAction])
     }
     
+}
+
+extension Date {
+
+    static func duration(from : Date, to : Date) -> String {
+
+        let dayHour: Set<Calendar.Component> = [.day, .hour, .minute]
+        let difference = NSCalendar.current.dateComponents(dayHour, from: from, to: to);
+        
+        
+        let minutes = "\(difference.minute ?? 0)" == "0" ? "" : "\(difference.minute ?? 0)" + "m"
+        let hours = "\(difference.hour ?? 0)" == "0" ? "" : "\(difference.hour ?? 0)" + "h"
+        let days = "\(difference.day ?? 0)d"
+
+        if let day = difference.day, day          > 0 { return days + " " + hours }
+        if let hour = difference.hour, hour       > 0 { return hours + " " + minutes}
+        if let minute = difference.minute, minute > 0 { return minutes }
+
+        return ""
+    }
+
 }

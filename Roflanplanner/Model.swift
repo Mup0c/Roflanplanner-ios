@@ -9,19 +9,20 @@
 import Foundation
 import Alamofire
 
-enum getType {
-    case events
-    case instances
+enum objectType {
+    case event
+    case instance
+    case pattern
 }
 
 class Data {
     
     var events: [Int64:Event] = [:]
     var instanes: [Int:[EventInstance]] = [:]
-    
-    
+    var patterns: [Int64:Pattern] = [:]
+
     func fetchEvents(completion: @escaping () -> Void) {
-        Api.get(type: getType.events) { result in
+        Api.get(type: objectType.event) { result in
             switch result {
             case .success(let json):
                 print("success fetch events")
@@ -47,7 +48,7 @@ class Data {
     }
     
     func fetchInstances(completion: @escaping () -> Void) {
-        Api.get(type: getType.instances) { result in
+        Api.get(type: objectType.instance) { result in
             switch result {
             case .success(let jsonArray):
                 print("success fetch instances")
@@ -80,10 +81,90 @@ class Data {
         }
     }
     
+    func fetchPatterns(completion: @escaping () -> Void) {
+        Api.get(type: objectType.pattern) { result in
+            switch result {
+            case .success(let json):
+                print("success fetch patterns")
+                print(json)
+                let jsonArray = json as! [String: Any]
+                let data = jsonArray["data"] as! Array<[String: Any]>
+                self.patterns.removeAll()
+                for jsonPattern in data {
+                    //let event = Event(json: jsonEvent)
+                    let jsonPattern = try! JSONSerialization.data(withJSONObject: jsonPattern)
+                    let decoder = JSONDecoder()
+                    let pattern = try! decoder.decode(Pattern.self, from: jsonPattern)
+                    self.patterns[pattern.event_id!] = pattern
+                    //print(event.id)
+                    //print("appended")
+                }
+                completion()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func deleteEvent(eventInstance: EventInstance, completion: @escaping () -> Void) {
+        let event = events[eventInstance.event_id!]!
+        Api.delete(type: .pattern, id: patterns[event.id!]!.id!) { _ in
+            Api.delete(type: .event, id: event.id!) { _ in
+                completion()
+            }
+        }
+        
+    }
+    
+    static func patchEvent(event: Event, pattern: Pattern) {
+        
+        Api.patch(type: .event, id: event.id!, object: event) { _ in
+            Api.patch(type: .pattern ,id: pattern.id!, object: pattern) { _ in }
+        }
+        
+    }
+    
+    static func postEvent(event: Event, pattern: Pattern, completion: @escaping () -> Void ) {
+        Api.post(type: .event, object: event) { result in
+            switch result {
+                
+            case .success(let json):
+                print(json)
+                let jsonArray = json as! [String: Any]
+                let data = jsonArray["data"] as! Array<[String: Any]>
+                let jsonEvent = data.first!
+                let id = jsonEvent["id"] as! Int64
+                pattern.event_id = id
+                Api.post(type: .pattern, object: pattern) { result in
+                    switch result {
+                        
+                    case .success(let json):
+                        print(json)
+                        completion()
+
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+                
+            case .failure(let error):
+                print(error)
+                
+            }
+        }
+        
+    }
+    
 }
 
+protocol JsonEncodable {
+    
+    func encode() -> [String : Any]
+    
+}
 
-class Event : Codable {
+class Event : JsonEncodable, Codable {
     
     var created_at: Int64?
     var details: String?
@@ -94,45 +175,74 @@ class Event : Codable {
     var status: String?
     var updated_at: Int64?
     
+    func encode() -> [String : Any] {
+        let encoder = JSONEncoder()
+        return try! JSONSerialization.jsonObject(with: try! encoder.encode(self)) as! [String : Any]
+    }
+    
 }
 
-class EventInstance : Codable{
+class EventInstance : JsonEncodable, Codable {
     
     var event_id: Int64?
     var pattern_id: Int64?
     var started_at: Int64?
     var ended_at: Int64?
     
+    func encode() -> [String : Any] {
+        let encoder = JSONEncoder()
+        return try! JSONSerialization.jsonObject(with: try! encoder.encode(self)) as! [String : Any]
+    }
+    
 }
 
-class EventPattern : Codable {
+class Pattern : JsonEncodable, Codable {
     
     var created_at: Int64?
     var duration: Int64?
     var ended_at: Int64?
     var event_id: Int64?
     var exrule: String?
+    var exrules: Array<[String : String]>?
     var id: Int64?
     var rrule: String?
     var started_at: Int64?
     var timezone: String?
     var updated_at: Int64?
     
+    func encode() -> [String : Any] {
+        let encoder = JSONEncoder()
+        return try! JSONSerialization.jsonObject(with: try! encoder.encode(self)) as! [String : Any]
+    }
+    
 }
 
 class Api {
     
     static let baseUrl = "http://frrcode.com:9040/api/v1"
+    static let headers = ["X-Firebase-Auth": "tester"]
     
-    static func get(type: getType, completion: @escaping (Result<Any>) -> Void) {
+    static func buildUrl(type: objectType) -> String {
+        
         var url = self.baseUrl
+        
         switch type {
-        case .events:
+        case .event:
             url += "/events"
-        case .instances:
+        case .instance:
             url += "/events/instances"
+        case .pattern:
+            url += "/patterns"
         }
-        Alamofire.request(url, headers: ["X-Firebase-Auth": "tester"])
+        
+        return url
+    }
+    
+    static func get(type: objectType, completion: @escaping (Result<Any>) -> Void) {
+        
+        let url = self.buildUrl(type: type)
+        
+        Alamofire.request(url, headers: headers)
             .validate()
             .responseJSON() {  responseJSON in
                 switch responseJSON.result {
@@ -142,21 +252,79 @@ class Api {
                     completion(.failure(error))
                 }
         }
+        
     }
     
-    static func patch(id: Int64, parameters: Parameters, completion: @escaping (Result<Any>) -> Void) {
-        var url = self.baseUrl
-        url += "/events"  //todo: switch
-        url += String(id)
-
-        Alamofire.request(url, method: .patch, parameters: parameters, encoding: JSONEncoding.default,
-                          headers: ["X-Firebase-Auth": "tester"])
+    static func patch(type: objectType, id: Int64, object: JsonEncodable, completion: @escaping (Result<Any>) -> Void) {
+        
+        var url = self.buildUrl(type: type)
+        url += "/" + String(id)
+        
+        Alamofire.request(url, method: .patch, parameters: object.encode(), encoding: JSONEncoding.default,
+                          headers: headers)
             .validate()
             .responseJSON() {  responseJSON in
                 switch responseJSON.result {
                 case .success(let value):
+                    print("patch success")
+                    print(url)
+                    print(value)
                     completion(.success(value))
                 case .failure(let error):
+                    print("patch failure")
+                    print(url)
+                    print(error)
+                    completion(.failure(error))
+                }
+        }
+        
+    }
+    
+    static func delete(type: objectType, id: Int64, completion: @escaping (Result<Any>) -> Void) {
+        
+        var url = self.buildUrl(type: type)
+        url += "/" + String(id)
+        
+        Alamofire.request(url, method: .delete, headers: headers)
+            .validate()
+            .responseJSON() {  responseJSON in
+                switch responseJSON.result {
+                case .success(let value):
+                    print("delete success")
+                    print(url)
+                    print(value)
+                    completion(.success(value))
+                case .failure(let error):
+                    print("delete failure")
+                    print(url)
+                    print(error)
+                    completion(.failure(error))
+                }
+        }
+        
+    }
+    
+    static func post(type: objectType, object: JsonEncodable, completion: @escaping (Result<Any>) -> Void) {
+        
+        var url = self.buildUrl(type: type)
+        
+        if type == .pattern {
+            let pattern = object as! Pattern
+            url += "?event_id=" + String(pattern.event_id!)
+        }
+        
+        Alamofire.request(url, method: .post, parameters: object.encode(), encoding: JSONEncoding.default,
+                          headers: headers)
+            .validate()
+            .responseJSON() {  responseJSON in
+                switch responseJSON.result {
+                case .success(let value):
+                    print("post success")
+                    print(url)
+                    completion(.success(value))
+                case .failure(let error):
+                    print("post failure")
+                    print(url)
                     completion(.failure(error))
                 }
         }
