@@ -38,7 +38,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <items>
                                     <navigationItem title="Roflanplanner" id="lr1-Sz-wsZ">
-                                        <barButtonItem key="rightBarButtonItem" title="Toggle view" id="5Nm-VZ-Lpe">
+                                        <barButtonItem key="rightBarButtonItem" title="Toggle view" image="aspectratio" catalog="system" id="5Nm-VZ-Lpe">
                                             <connections>
                                                 <action selector="clickedChangeView:" destination="BYZ-38-t0r" id="ub4-QL-WrV"/>
                                             </connections>
@@ -87,6 +87,12 @@
                                     <barButtonItem systemItem="add" id="8kf-IU-x3N">
                                         <connections>
                                             <segue destination="PDl-GC-bGU" kind="showDetail" identifier="toCreateSegue" id="R0z-k8-CEP"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="jtk-GN-2K0"/>
+                                    <barButtonItem title="Redeem token" image="square.and.arrow.down" catalog="system" id="9q9-jW-eFv">
+                                        <connections>
+                                            <action selector="clickedRedeemButton:" destination="BYZ-38-t0r" id="e3a-PG-fLD"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -458,6 +464,10 @@
             <point key="canvasLocation" x="856.79999999999995" y="133.5832083958021"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="aspectratio" catalog="system" width="64" height="46"/>
+        <image name="square.and.arrow.down" catalog="system" width="60" height="64"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="R0z-k8-CEP"/>
     </inferredMetricsTieBreakers>

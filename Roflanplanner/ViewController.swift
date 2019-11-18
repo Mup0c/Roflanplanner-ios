@@ -102,6 +102,32 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
         self.refreshData()
         
     }
+    
+    var tokenText : UITextField?
+    @IBAction func clickedRedeemButton(_ sender: Any) {
+        let alertController = UIAlertController(title: "Insert token", message: nil, preferredStyle: .alert)
+        alertController.addTextField(configurationHandler: tokenText)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: self.okHandler)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true)
+        
+    }
+    
+    func tokenText(textField: UITextField!) {
+        tokenText = textField
+    }
+    
+    func okHandler(alert: UIAlertAction) {
+        if let token = tokenText?.text {
+            print(token)
+            self.data.getShare(token: token) {
+                self.refreshData()
+            }
+        }
+    }
+    
 }
 
 
@@ -149,7 +175,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let event = self.data.events[instance.event_id!]!
         cell.detailTextLabel?.text = event.name
         let from = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.started_at!) / 1000)
-        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.duration!) / 1000)
+        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.duration! + self.data.patterns[instance.event_id!]!.started_at!) / 1000)
         let duration = Date.duration(from: from, to: to)
         cell.textLabel?.text = DateFormatter.localizedString(from: from, dateStyle: .none, timeStyle: .short) + " " + duration
         return cell
@@ -178,9 +204,25 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             success(true)
         })
-        TrashAction.backgroundColor = .red
+        TrashAction.backgroundColor = .systemRed
         
-        return UISwipeActionsConfiguration(actions: [TrashAction])
+        let ShareAction = UIContextualAction(style: .normal, title:  "Share", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+            print("share action ...")
+            print(indexPath.row)
+            self.data.postShare(event: self.data.events[self.selectedDayInstances![indexPath.row].event_id!]!) {
+                message in
+                let objectsToShare = [message] as [Any]
+                let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                activityVC.excludedActivityTypes = [UIActivity.ActivityType.airDrop, UIActivity.ActivityType.addToReadingList]
+                self.present(activityVC, animated: true, completion: nil)
+                
+            }
+            success(true)
+
+        })
+        ShareAction.backgroundColor = .systemBlue
+        
+        return UISwipeActionsConfiguration(actions: [TrashAction, ShareAction])
     }
     
 }

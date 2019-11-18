@@ -13,6 +13,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     var event : Event!
     var pattern: Pattern!
     
+    
     var editingState : Bool!
     
     var datePickerStart : UIDatePicker!
@@ -60,12 +61,20 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         event.name = eventNameTextView.text
         pattern.started_at = Int64(datePickerStart.date.timeIntervalSince1970 * 1000)
         pattern.ended_at = max(Int64(datePickerDuration.date.timeIntervalSince1970 * 1000), pattern.started_at!)
-        pattern.duration = Int64(datePickerEnd.date.timeIntervalSince1970 * 1000)
+        pattern.duration = Int64((datePickerEnd.date.timeIntervalSince1970 - datePickerStart.date.timeIntervalSince1970) * 1000)
         var weekdays : Array<Int> = []
+
+
         for button in weekdayButtons {
             if button.isSelected {
                 weekdays.append(button.tag)
             }
+        }
+
+        let weekday = Calendar.current.component(.weekday, from: datePickerStart.date) - 2
+        print("HEHE: ", weekday)
+        if !weekdays.isEmpty && weekdays.firstIndex(of: weekday) == nil{
+            weekdays.append(weekday)
         }
         pattern.setRRuleWeekly(from: weekdays)
         print(weekdays)
@@ -93,7 +102,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             eventDetailsTextView.text = event?.details
             
             datePickerStart.date = Date(timeIntervalSince1970: (Double(pattern.started_at!) / 1000))
-            datePickerEnd.date = Date(timeIntervalSince1970: (Double(pattern.duration!) / 1000))
+            datePickerEnd.date = Date(timeIntervalSince1970: (Double(pattern.started_at! + pattern.duration!) / 1000))
             datePickerDuration.date = Date(timeIntervalSince1970: (Double(pattern.ended_at!) / 1000))
 
             dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
@@ -117,7 +126,6 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
 
         } else {
             editButton.title = "Done"
-            navigationBar.title = "Editing"
             
             eventNameCell.isHidden = false
             eventNameTextView.isEditable = true
@@ -173,6 +181,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     
     @objc func dateChanged(datePickerStart: UIDatePicker) {
         datePickerEnd.date = max(datePickerEnd.date, datePickerStart.date)
+        datePickerDuration.date = max(datePickerStart.date, datePickerDuration.date)
         dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
         dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
 
@@ -180,7 +189,6 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     
     @objc func dateChanged(datePickerEnd: UIDatePicker) {
         datePickerStart.date = min(datePickerStart.date, datePickerEnd.date)
-        datePickerDuration.date = min(datePickerStart.date, datePickerEnd.date)
         dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
         dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
     }

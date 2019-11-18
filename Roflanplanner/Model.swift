@@ -157,6 +157,58 @@ class Data {
         
     }
     
+    func postShare(event: Event, completion: @escaping (String) -> Void ) {
+        var params : Array<[String : Any]> = []
+        params.append([:])
+        params[0]["action"] = "READ"
+        params[0]["entity_id"] = event.id!
+        params[0]["entity_type"] = "EVENT"
+        
+        params.append([:])
+        params[1]["action"] = "UPDATE"
+        params[1]["entity_id"] = event.id!
+        params[1]["entity_type"] = "EVENT"
+        params.append([:])
+
+        params[2]["action"] = "DELETE"
+        params[2]["entity_id"] = event.id!
+        params[2]["entity_type"] = "EVENT"
+        params.append([:])
+
+        params[3]["action"] = "READ"
+        params[3]["entity_id"] = self.patterns[event.id!]!.id!
+        params[3]["entity_type"] = "PATTERN"
+        params.append([:])
+
+        params[4]["action"] = "UPDATE"
+        params[4]["entity_id"] = self.patterns[event.id!]!.id!
+        params[4]["entity_type"] = "PATTERN"
+        params.append([:])
+
+        params[5]["action"] = "DELETE"
+        params[5]["entity_id"] = self.patterns[event.id!]!.id!
+        params[5]["entity_type"] = "PATTERN"
+
+        Api.postShare(parameters: params, completion:{ result in
+            completion(result.components(separatedBy: "/").last!)
+        })
+    }
+    
+    func getShare(token: String, completion: @escaping () -> Void ) {
+        Api.getShare(token: token) { result in
+            switch result {
+            case .success(let json):
+                print("success apply token")
+                print(json)
+                completion()
+                
+            case .failure(let error):
+                print(error)
+            }
+        }
+        
+    }
+    
 }
 
 protocol JsonEncodable {
@@ -240,16 +292,20 @@ class Pattern : JsonEncodable, Codable {
 
             case 6:
                 dayStr += "SU,"
+                
+            case -1:
+                dayStr += "SU,"
 
             default:
                 continue
             }
         }
         if dayStr.isEmpty {
-            return
+            self.rrule = ""
+        } else {
+            dayStr.popLast()
+            self.rrule = "FREQ=WEEKLY;BYDAY=\(dayStr);INTERVAL=1"
         }
-        dayStr.popLast()
-        self.rrule = "FREQ=WEEKLY;BYDAY=\(dayStr);INTERVAL=1"
     }
     
 }
@@ -257,7 +313,7 @@ class Pattern : JsonEncodable, Codable {
 class Api {
     
     static let baseUrl = "http://frrcode.com:9040/api/v1"
-    static let headers = ["X-Firebase-Auth": "tester"]
+    static let headers = ["X-Firebase-Auth": "serega_mem"]
     
     static func buildUrl(type: objectType) -> String {
         
@@ -365,6 +421,51 @@ class Api {
                     completion(.failure(error))
                 }
         }
+    }
+    
+    static func postShare(parameters: Array<Any>, completion: @escaping (String) -> Void) {
+        var url = self.baseUrl
+        url += "/share"
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(headers["X-Firebase-Auth"], forHTTPHeaderField: "X-Firebase-Auth")
+
+        
+        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters)
+        Alamofire.request(request)
+            .validate()
+            .responseString(encoding: .utf8){  responseJSON in
+                switch responseJSON.result {
+                case .success(let value):
+                    print("post success")
+                    print(url)
+                    print(value)
+                    
+                    completion(value)
+                case .failure(let error):
+                    print("post failure")
+                    print(url)
+                    print(error)
+                }
+        }
+    }
+    
+    static func getShare(token: String, completion: @escaping (Result<Any>) -> Void) {
+        var url = self.baseUrl
+        url += "/share/" + token
+        Alamofire.request(url, headers: headers)
+            .validate()
+            .responseJSON() {  responseJSON in
+                switch responseJSON.result {
+                case .success(let value):
+                    completion(.success(value))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+        }
+        
     }
 
 }
