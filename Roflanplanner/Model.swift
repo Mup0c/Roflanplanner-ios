@@ -65,6 +65,7 @@ class Data {
                     let format = DateFormatter()
                     format.dateFormat = "yyyyMMdd"
                     let formattedDate = Int(format.string(from: date))!
+                    
                     if self.instanes[formattedDate] != nil {
                         self.instanes[formattedDate]!.append(instance)
                     } else {
@@ -213,6 +214,42 @@ class Pattern : JsonEncodable, Codable {
     func encode() -> [String : Any] {
         let encoder = JSONEncoder()
         return try! JSONSerialization.jsonObject(with: try! encoder.encode(self)) as! [String : Any]
+    }
+    
+    func setRRuleWeekly(from days: [Int]){
+        var dayStr = ""
+        for i in days {
+            switch i {
+            case 0:
+                dayStr += "MO,"
+                
+            case 1:
+                dayStr += "TU,"
+
+            case 2:
+                dayStr += "WE,"
+
+            case 3:
+                dayStr += "TH,"
+
+            case 4:
+                dayStr += "FR,"
+
+            case 5:
+                dayStr += "SA,"
+
+            case 6:
+                dayStr += "SU,"
+
+            default:
+                continue
+            }
+        }
+        if dayStr.isEmpty {
+            return
+        }
+        dayStr.popLast()
+        self.rrule = "FREQ=WEEKLY;BYDAY=\(dayStr);INTERVAL=1"
     }
     
 }

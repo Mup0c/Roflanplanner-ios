@@ -149,7 +149,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let event = self.data.events[instance.event_id!]!
         cell.detailTextLabel?.text = event.name
         let from = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.started_at!) / 1000)
-        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.ended_at!) / 1000)
+        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.duration!) / 1000)
         let duration = Date.duration(from: from, to: to)
         cell.textLabel?.text = DateFormatter.localizedString(from: from, dateStyle: .none, timeStyle: .short) + " " + duration
         return cell
