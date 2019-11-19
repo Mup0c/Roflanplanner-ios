@@ -268,6 +268,21 @@ class Pattern : JsonEncodable, Codable {
         return try! JSONSerialization.jsonObject(with: try! encoder.encode(self)) as! [String : Any]
     }
     
+    func getWeekdays() -> [Int] {
+        if rrule!.isEmpty { return [] }
+        var array : [Int] = []
+        let rule = rrule!.components(separatedBy: ";")[1]
+        if rule.contains("MO") { array.append(0) }
+        if rule.contains("TU") { array.append(1) }
+        if rule.contains("WE") { array.append(2) }
+        if rule.contains("TH") { array.append(3) }
+        if rule.contains("FR") { array.append(4) }
+        if rule.contains("SA") { array.append(5) }
+        if rule.contains("SU") { array.append(6) }
+        print("rrule ", rrule)
+        return array
+    }
+    
     func setRRuleWeekly(from days: [Int]){
         var dayStr = ""
         for i in days {

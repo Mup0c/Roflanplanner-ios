@@ -18,6 +18,7 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     @IBOutlet var calendarHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet var dayTable: UITableView!
+    @IBOutlet weak var toggleViewButton: UIBarButtonItem!
     
     var selectedDayInstances : [EventInstance]?
     var selectedInstance : EventInstance!
@@ -70,8 +71,11 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     @IBAction func clickedChangeView(_ sender: Any) {
         if calendar.scope == .month {
             calendar.setScope(.week, animated: true)
+            toggleViewButton.title = "Expand"
         } else {
             self.calendar.setScope(.month, animated: true)
+            toggleViewButton.title = "Shrink"
+
         }
     }
     
@@ -194,7 +198,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
 
-        let TrashAction = UIContextualAction(style: .destructive, title:  "Trash", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let TrashAction = UIContextualAction(style: .destructive, title:  "Delete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("delete action ...")
             print(indexPath.row)
             self.data.deleteEvent(eventInstance: self.selectedDayInstances![indexPath.row]) { 

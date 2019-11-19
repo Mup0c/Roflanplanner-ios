@@ -101,6 +101,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             eventNameTextView.text = event?.name
             eventDetailsTextView.text = event?.details
             
+            
             datePickerStart.date = Date(timeIntervalSince1970: (Double(pattern.started_at!) / 1000))
             datePickerEnd.date = Date(timeIntervalSince1970: (Double(pattern.started_at! + pattern.duration!) / 1000))
             datePickerDuration.date = Date(timeIntervalSince1970: (Double(pattern.ended_at!) / 1000))
@@ -127,6 +128,10 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         } else {
             editButton.title = "Done"
             
+            
+            dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
+            dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
+            dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
             eventNameCell.isHidden = false
             eventNameTextView.isEditable = true
             eventDetailsTextView.isEditable = true
@@ -153,10 +158,32 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         editingState = event == nil
         initDatePickers()
+        eventNameTextView.delegate = self
 
         refreshAppearance()
         
+        weekdayButtons = weekdayButtons.sorted(by: { $0.tag < $1.tag })
+        if let weekdays = pattern?.getWeekdays() {
+            print("weekdays", weekdays)
+            for day in weekdays{
+                weekdayButtons[day].isSelected = true
+            }
+        }
+        
+        
         print("Event table view loaded")
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Unnamed" && textView.tag == 2 {
+            textView.text = nil
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty && textView.tag == 2 {
+            textView.text = "Unnamed"
+        }
     }
     
     func initDatePickers() {

@@ -38,7 +38,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <items>
                                     <navigationItem title="Roflanplanner" id="lr1-Sz-wsZ">
-                                        <barButtonItem key="rightBarButtonItem" title="Toggle view" image="aspectratio" catalog="system" id="5Nm-VZ-Lpe">
+                                        <barButtonItem key="rightBarButtonItem" title="Shrink" id="5Nm-VZ-Lpe">
                                             <connections>
                                                 <action selector="clickedChangeView:" destination="BYZ-38-t0r" id="ub4-QL-WrV"/>
                                             </connections>
@@ -121,6 +121,7 @@
                         <outlet property="calendar" destination="hkd-Ra-w0y" id="aIL-Li-Wto"/>
                         <outlet property="calendarHeightConstraint" destination="41x-gq-9Ow" id="2t0-C8-PkX"/>
                         <outlet property="dayTable" destination="gEV-lZ-Ocd" id="ePu-7c-WfF"/>
+                        <outlet property="toggleViewButton" destination="5Nm-VZ-Lpe" id="Jbx-Eq-hAN"/>
                         <segue destination="PDl-GC-bGU" kind="showDetail" identifier="toEventSegue" id="uuc-yg-aTq"/>
                     </connections>
                 </viewController>
@@ -145,7 +146,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gbn-oU-xW9" translatesAutoresizingMaskIntoConstraints="NO" id="L9I-ej-VzE">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="105"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" editable="NO" text="Unnamed" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRY-kl-d9M">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" tag="2" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" scrollEnabled="NO" editable="NO" text="Unnamed" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QRY-kl-d9M">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="105"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -383,7 +384,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" editable="NO" text="Select duration" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="NId-SD-diF">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" editable="NO" text="Select date" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="NId-SD-diF">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -465,7 +466,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="aspectratio" catalog="system" width="64" height="46"/>
         <image name="square.and.arrow.down" catalog="system" width="60" height="64"/>
     </resources>
     <inferredMetricsTieBreakers>

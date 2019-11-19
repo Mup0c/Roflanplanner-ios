@@ -66,7 +66,7 @@ DEPENDENCIES:
   - FSCalendar
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - CalendarKit
     - DateToolsSwift
@@ -96,4 +96,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: a64efb9440da3eb63668de4be3c51d3f3925c827
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4
