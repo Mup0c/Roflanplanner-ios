@@ -24,7 +24,12 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     var data = Data()
     var refreshControl = UIRefreshControl()
 
-    @objc func refreshData() {
+    @objc func objcRefreshData() {
+        self.refreshData()
+    }
+    
+    func refreshData(completion: @escaping () -> Void = {}) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         self.data.fetchEvents() {
             self.data.fetchPatterns {
                 self.data.fetchInstances {
@@ -32,9 +37,11 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
                     self.refreshSelectedDayInstances(date: date)
                     self.calendar.reloadData()
                     self.dayTable.reloadData()
-
                     print("reloaded")
                     self.refreshControl.endRefreshing()
+                    completion()
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+
                 }
             }
         }
@@ -52,7 +59,7 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(objcRefreshData), for: .valueChanged)
         dayTable.refreshControl = refreshControl
         self.refreshData()
         
@@ -84,6 +91,9 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
         if segue.identifier == "toCreateSegue" {
             
             segue.destination.presentationController?.delegate = self;
+            let navController = segue.destination as! UINavigationController
+            let eventTableView = navController.topViewController as! EventTableViewController
+            eventTableView.selectedDate = self.calendar.selectedDate
             print("create action...")
 
         }
@@ -98,13 +108,6 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
             print(weekView.JZEvents!)
             
         }
-        
-    }
-    
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        
-        print("Dismissed")
-        self.refreshData()
         
     }
     

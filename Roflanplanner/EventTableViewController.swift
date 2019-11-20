@@ -13,7 +13,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     var event : Event!
     var pattern: Pattern!
     
-    
+    var selectedDate : Date?
     var editingState : Bool!
     
     var datePickerStart : UIDatePicker!
@@ -52,7 +52,14 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         print(sender.tag)
     }
     
+    func getWeekday(from date: Date) -> Int {
+        return (Calendar.current.component(.weekday, from: date) + 5) % 7
+    }
+    
     func saveData() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        editButton.isEnabled = false
+
         let willCreateNewEvent = event == nil
         event = event ?? Event()
         pattern = pattern ?? Pattern()
@@ -71,25 +78,31 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             }
         }
 
-        let weekday = (Calendar.current.component(.weekday, from: datePickerStart.date) + 5) % 7
+        let weekday = getWeekday(from: datePickerStart.date)
         print("weekday_index: ", weekday)
         if !weekdays.isEmpty && weekdays.firstIndex(of: weekday) == nil{
             weekdays.append(weekday)
         }
         pattern.setRRuleWeekly(from: weekdays)
         print(weekdays)
-        if willCreateNewEvent {
-            editButton.isEnabled = false
-            Data.postEvent(event: event, pattern: pattern) {
-                self.dismiss(animated: true, completion: {})
-                if #available(iOS 13.0, *) {
-                    let navCtrlPresCtrl = self.navigationController!.presentationController!
-                    navCtrlPresCtrl.delegate?.presentationControllerDidDismiss?(navCtrlPresCtrl)
+        
+        let completion = {
+            let navCtrlPresCtrl = self.navigationController!.presentationController!
+            if let viewCtrl = navCtrlPresCtrl.delegate as? ViewController {
+                print("reloading via EventTableViewController")
+                viewCtrl.calendar.select(self.datePickerStart.date)
+                viewCtrl.refreshData() {
+                    self.dismiss(animated: true, completion: {})
                 }
             }
-        } else {
-            Data.patchEvent(event: event, pattern: pattern)
         }
+        
+        if willCreateNewEvent {
+            Data.postEvent(event: event, pattern: pattern, completion: completion)
+        } else {
+            Data.patchEvent(event: event, pattern: pattern, completion: completion)
+        }
+        
     }
     
     func refreshAppearance() {
@@ -117,6 +130,9 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             dateTextDuration.isSelectable = false
             dateTextStart.isSelectable = false
             for button in weekdayButtons {
+                if !button.isEnabled {
+                    button.isSelected = true
+                }
                 button.isEnabled = false
             }
             
@@ -143,6 +159,9 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
         dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
         
+        let weekday = getWeekday(from: datePickerStart.date)
+        weekdayButtons[weekday].isEnabled = false
+        
         
     }
     
@@ -157,10 +176,10 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         editingState = event == nil
         initDatePickers()
         eventNameTextView.delegate = self
+        weekdayButtons = weekdayButtons.sorted(by: { $0.tag < $1.tag })
 
         refreshAppearance()
         
-        weekdayButtons = weekdayButtons.sorted(by: { $0.tag < $1.tag })
         if let weekdays = pattern?.getWeekdays() {
             print("weekdays", weekdays)
             for day in weekdays{
@@ -195,11 +214,15 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         dateTextEnd.inputView = datePickerEnd
         dateTextDuration.inputView = datePickerDuration
         
-        
         datePickerEnd.addTarget(self, action: #selector(dateChanged(datePickerEnd:)), for: .valueChanged)
         datePickerStart.addTarget(self, action: #selector(dateChanged(datePickerStart:)), for: .valueChanged)
         datePickerDuration.addTarget(self, action: #selector(dateChanged(datePickerDuration:)), for: .valueChanged)
         
+        if let date = self.selectedDate {
+              datePickerStart.date = date
+              datePickerEnd.date = date
+              datePickerDuration.date = date
+          }
         
     }
     

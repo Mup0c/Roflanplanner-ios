@@ -144,10 +144,12 @@ class Data {
         
     }
     
-    static func patchEvent(event: Event, pattern: Pattern) {
+    static func patchEvent(event: Event, pattern: Pattern, completion: @escaping () -> Void ) {
         
         Api.patch(type: .event, id: event.id!, object: event) { _ in
-            Api.patch(type: .pattern ,id: pattern.id!, object: pattern) { _ in }
+            Api.patch(type: .pattern ,id: pattern.id!, object: pattern) { _ in
+                completion()
+            }
         }
         
     }

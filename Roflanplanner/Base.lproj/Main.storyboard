@@ -307,10 +307,154 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Repeat every" id="ftD-8t-7LB">
+                            <tableViewSection headerTitle="Repeat" id="ftD-8t-7LB">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="jhm-ax-4Qb">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="mZu-EO-W9M">
                                         <rect key="frame" x="0.0" y="423" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mZu-EO-W9M" id="rmh-bj-qZh">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="B9f-kp-bBJ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="45"/>
+                                                    <segments>
+                                                        <segment title="None"/>
+                                                        <segment title="Daily"/>
+                                                        <segment title="Weekly"/>
+                                                        <segment title="Monthly"/>
+                                                        <segment title="Yearly"/>
+                                                    </segments>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="B9f-kp-bBJ" firstAttribute="leading" secondItem="rmh-bj-qZh" secondAttribute="leading" id="0x3-M0-eCJ"/>
+                                                <constraint firstItem="B9f-kp-bBJ" firstAttribute="height" secondItem="rmh-bj-qZh" secondAttribute="height" id="8aF-Gu-5bG"/>
+                                                <constraint firstItem="B9f-kp-bBJ" firstAttribute="width" secondItem="rmh-bj-qZh" secondAttribute="width" id="KHs-UG-S5b"/>
+                                                <constraint firstItem="B9f-kp-bBJ" firstAttribute="top" secondItem="rmh-bj-qZh" secondAttribute="top" id="LCX-xp-un7"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="8dL-kL-pOe">
+                                        <rect key="frame" x="0.0" y="467" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8dL-kL-pOe" id="Yfu-Cq-tdd">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xQS-DO-133">
+                                                    <rect key="frame" x="33" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="Iag-0K-8k4"/>
+                                                        <constraint firstAttribute="width" constant="40" id="cXg-ZT-5Bg"/>
+                                                    </constraints>
+                                                    <state key="normal" title="MO"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="Mgn-E3-Rxg"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yys-G7-IDb">
+                                                    <rect key="frame" x="78" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="6MK-dI-4fG"/>
+                                                        <constraint firstAttribute="width" constant="40" id="j4O-He-UVD"/>
+                                                    </constraints>
+                                                    <state key="normal" title="TU"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="xED-gQ-eqd"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUq-y6-j0f">
+                                                    <rect key="frame" x="123" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="Oo5-ci-U2v"/>
+                                                        <constraint firstAttribute="width" constant="40" id="Zkz-Dz-iAX"/>
+                                                    </constraints>
+                                                    <state key="normal" title="WE"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="UlO-4z-FdZ"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eTD-cq-aja">
+                                                    <rect key="frame" x="167" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="26M-9S-BZq"/>
+                                                        <constraint firstAttribute="width" constant="40" id="NUm-mo-UTb"/>
+                                                    </constraints>
+                                                    <state key="normal" title="TH"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="UTa-Zn-bKf"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txw-Yo-M2X">
+                                                    <rect key="frame" x="212" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="CT2-xa-2x9"/>
+                                                        <constraint firstAttribute="height" constant="38" id="Kb6-x2-dDg"/>
+                                                    </constraints>
+                                                    <state key="normal" title="FR"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="d7a-yR-PDz"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ys0-zE-KVL">
+                                                    <rect key="frame" x="257" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="GyC-ta-Sd3"/>
+                                                        <constraint firstAttribute="height" constant="38" id="xRu-Pl-cLL"/>
+                                                    </constraints>
+                                                    <state key="normal" title="SA"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="oWa-NJ-eb7"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zqO-l2-Gip">
+                                                    <rect key="frame" x="302" y="3" width="40" height="38"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="Ybr-tg-1i6"/>
+                                                        <constraint firstAttribute="height" constant="38" id="bCe-Nz-aal"/>
+                                                    </constraints>
+                                                    <state key="normal" title="SU"/>
+                                                    <connections>
+                                                        <action selector="clickedWeekdayButton:" destination="R9B-Gm-F63" eventType="touchUpInside" id="KjK-m8-hci"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="LUq-y6-j0f" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="1xz-Um-g0a"/>
+                                                <constraint firstItem="ys0-zE-KVL" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="6OF-VS-QkY"/>
+                                                <constraint firstItem="yys-G7-IDb" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="7Ur-YU-vg8"/>
+                                                <constraint firstItem="txw-Yo-M2X" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="AM1-xY-i3W"/>
+                                                <constraint firstItem="LUq-y6-j0f" firstAttribute="leading" secondItem="yys-G7-IDb" secondAttribute="trailing" constant="5" id="ASg-NY-kuY"/>
+                                                <constraint firstAttribute="bottom" secondItem="eTD-cq-aja" secondAttribute="bottom" constant="3" id="CPG-tT-k3T"/>
+                                                <constraint firstAttribute="bottom" secondItem="LUq-y6-j0f" secondAttribute="bottom" constant="3" id="EFP-nb-alW"/>
+                                                <constraint firstAttribute="bottom" secondItem="zqO-l2-Gip" secondAttribute="bottom" constant="3" id="HrH-zZ-XGL"/>
+                                                <constraint firstItem="zqO-l2-Gip" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="Jzg-ok-Gsq"/>
+                                                <constraint firstItem="txw-Yo-M2X" firstAttribute="leading" secondItem="eTD-cq-aja" secondAttribute="trailing" constant="5" id="OK3-SX-K5N"/>
+                                                <constraint firstItem="txw-Yo-M2X" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="OhC-v5-t2h"/>
+                                                <constraint firstItem="xQS-DO-133" firstAttribute="leading" secondItem="Yfu-Cq-tdd" secondAttribute="leading" constant="33" id="QAP-Jv-ONv"/>
+                                                <constraint firstItem="eTD-cq-aja" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="Ser-Ls-Icx"/>
+                                                <constraint firstAttribute="bottom" secondItem="yys-G7-IDb" secondAttribute="bottom" constant="3" id="Slw-j7-3fo"/>
+                                                <constraint firstItem="eTD-cq-aja" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="U1l-Vf-JVJ"/>
+                                                <constraint firstItem="ys0-zE-KVL" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="VDO-wu-S1O"/>
+                                                <constraint firstAttribute="bottom" secondItem="txw-Yo-M2X" secondAttribute="bottom" constant="3" id="aem-y7-dul"/>
+                                                <constraint firstAttribute="bottom" secondItem="xQS-DO-133" secondAttribute="bottom" constant="3" id="bmj-gU-Txt"/>
+                                                <constraint firstItem="eTD-cq-aja" firstAttribute="leading" secondItem="LUq-y6-j0f" secondAttribute="trailing" constant="4" id="dGM-gX-agK"/>
+                                                <constraint firstItem="xQS-DO-133" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="duf-4I-3jf"/>
+                                                <constraint firstAttribute="trailing" secondItem="ys0-zE-KVL" secondAttribute="trailing" constant="78" id="hrO-QD-zcD"/>
+                                                <constraint firstItem="ys0-zE-KVL" firstAttribute="leading" secondItem="txw-Yo-M2X" secondAttribute="trailing" constant="5" id="kDs-X1-Mzn"/>
+                                                <constraint firstAttribute="trailing" secondItem="zqO-l2-Gip" secondAttribute="trailing" constant="33" id="klH-dY-WNV"/>
+                                                <constraint firstItem="zqO-l2-Gip" firstAttribute="leading" secondItem="txw-Yo-M2X" secondAttribute="trailing" constant="50" id="l5h-y7-bqt"/>
+                                                <constraint firstAttribute="bottom" secondItem="ys0-zE-KVL" secondAttribute="bottom" constant="3" id="laa-1r-njb"/>
+                                                <constraint firstItem="LUq-y6-j0f" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="pct-Wf-lEo"/>
+                                                <constraint firstItem="zqO-l2-Gip" firstAttribute="width" secondItem="xQS-DO-133" secondAttribute="width" id="t2z-Tm-ltx"/>
+                                                <constraint firstItem="yys-G7-IDb" firstAttribute="top" secondItem="Yfu-Cq-tdd" secondAttribute="top" constant="3" id="vJ7-og-ds2"/>
+                                                <constraint firstItem="yys-G7-IDb" firstAttribute="leading" secondItem="xQS-DO-133" secondAttribute="trailing" constant="5" id="ztd-oq-AWW"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="jhm-ax-4Qb">
+                                        <rect key="frame" x="0.0" y="511" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jhm-ax-4Qb" id="2eL-Pa-fz0">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -432,7 +576,7 @@
                             <tableViewSection headerTitle="Repeat till" id="TSa-hD-JRA">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="tJb-pB-lcC">
-                                        <rect key="frame" x="0.0" y="523" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="611" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tJb-pB-lcC" id="PVf-Fy-mTF">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
