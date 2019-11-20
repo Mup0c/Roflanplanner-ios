@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import JZCalendarWeekView
 
 enum objectType {
     case event
@@ -20,6 +21,7 @@ class Data {
     var events: [Int64:Event] = [:]
     var instanes: [Int:[EventInstance]] = [:]
     var patterns: [Int64:Pattern] = [:]
+    var JZevents: [Date:[JZBaseEvent]] = [:]
 
     func fetchEvents(completion: @escaping () -> Void) {
         Api.get(type: objectType.event) { result in
@@ -65,7 +67,11 @@ class Data {
                     let format = DateFormatter()
                     format.dateFormat = "yyyyMMdd"
                     let formattedDate = Int(format.string(from: date))!
-                    
+                    if self.JZevents[date] != nil {
+                        self.JZevents[date]!.append(JZBaseEvent.init(id: "0", startDate: Date(timeIntervalSince1970: Double(instance.started_at!) / 1000), endDate: Date(timeIntervalSince1970: Double(instance.ended_at!) / 1000)))
+                    } else {
+                        self.JZevents[date] = [JZBaseEvent.init(id: "0", startDate: Date(timeIntervalSince1970: Double(instance.started_at!) / 1000), endDate: Date(timeIntervalSince1970: Double(instance.ended_at!) / 1000))]
+                    }
                     if self.instanes[formattedDate] != nil {
                         self.instanes[formattedDate]!.append(instance)
                     } else {
@@ -269,7 +275,7 @@ class Pattern : JsonEncodable, Codable {
     }
     
     func getWeekdays() -> [Int] {
-        if rrule!.isEmpty { return [] }
+        if rrule?.isEmpty ?? true { return [] }
         var array : [Int] = []
         let rule = rrule!.components(separatedBy: ";")[1]
         if rule.contains("MO") { array.append(0) }

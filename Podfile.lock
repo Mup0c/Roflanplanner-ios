@@ -52,6 +52,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.7.0):
     - GoogleUtilities/Logger
+  - JZCalendarWeekView (0.7.1)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -64,6 +65,7 @@ DEPENDENCIES:
   - CalendarKit
   - Firebase/Analytics
   - FSCalendar
+  - JZCalendarWeekView
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -79,6 +81,8 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - Neon
+  trunk:
+    - JZCalendarWeekView
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
@@ -91,9 +95,10 @@ SPEC CHECKSUMS:
   FSCalendar: 3a5ed3636e2ba1b83ebebfcf0c2603105a6f5efe
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleUtilities: 273e67030e0de313e7304f6dcfa96fc5214f6c23
+  JZCalendarWeekView: 586a429ab3fbeef4f98d648ea6b801f57c5495cc
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Neon: 7fb5a9327e7e57911843f608e08f4893a74deaf9
 
-PODFILE CHECKSUM: a64efb9440da3eb63668de4be3c51d3f3925c827
+PODFILE CHECKSUM: 360c8ef5f902a636d6557854833a2ef6970f5050
 
 COCOAPODS: 1.8.4

@@ -10,5 +10,6 @@ pod 'Alamofire', '~> 4.8.1'
 pod 'FSCalendar'
 pod 'Firebase/Analytics'
 pod 'CalendarKit'
+pod 'JZCalendarWeekView'
 
 end

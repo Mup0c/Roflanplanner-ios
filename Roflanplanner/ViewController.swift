@@ -98,6 +98,17 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
 
         }
         
+        if segue.identifier == "toWeekViewSegue" {
+            print("week...")
+
+            segue.destination.presentationController?.delegate = self;
+            let weekView = segue.destination as! WeekViewController
+            weekView.JZEvents = self.data.JZevents
+            weekView.str = "kek"
+            print(weekView.JZEvents!)
+            
+        }
+        
     }
     
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
