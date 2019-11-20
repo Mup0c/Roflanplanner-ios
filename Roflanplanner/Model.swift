@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 import JZCalendarWeekView
 
 enum objectType {
@@ -16,12 +15,39 @@ enum objectType {
     case pattern
 }
 
+let DayByIndex = [
+    0 : "MO",
+    1 : "TU",
+    2 : "WE",
+    3 : "TH",
+    4 : "FR",
+    5 : "SA",
+    6 : "SU",
+]
+
+let IndexByDay = [
+    "MO" : 0,
+    "TU" : 1,
+    "WE" : 2,
+    "TH" : 3,
+    "FR" : 4,
+    "SA" : 5,
+    "SU" : 6,
+]
+
 class Data {
     
     var events: [Int64:Event] = [:]
     var instanes: [Int:[EventInstance]] = [:]
     var patterns: [Int64:Pattern] = [:]
     var JZevents: [Date:[JZBaseEvent]] = [:]
+    
+    
+    static func convertToDate(_ s1970: Int64) -> Date {
+        
+        return Date(timeIntervalSince1970: Double(s1970) / 1000)
+
+    }
 
     func fetchEvents(completion: @escaping () -> Void) {
         Api.get(type: objectType.event) { result in
@@ -63,20 +89,14 @@ class Data {
                     let jsonInstance = try! JSONSerialization.data(withJSONObject: jsonInstance)
                     let decoder = JSONDecoder()
                     let instance = try! decoder.decode(EventInstance.self, from: jsonInstance)
-                    let date = Date(timeIntervalSince1970: Double(instance.started_at!) / 1000)
+                    let date = Data.convertToDate(instance.started_at!)
                     let format = DateFormatter()
                     format.dateFormat = "yyyyMMdd"
                     let formattedDate = Int(format.string(from: date))!
-                    if self.JZevents[date] != nil {
-                        self.JZevents[date]!.append(JZBaseEvent.init(id: "0", startDate: Date(timeIntervalSince1970: Double(instance.started_at!) / 1000), endDate: Date(timeIntervalSince1970: Double(instance.ended_at!) / 1000)))
-                    } else {
-                        self.JZevents[date] = [JZBaseEvent.init(id: "0", startDate: Date(timeIntervalSince1970: Double(instance.started_at!) / 1000), endDate: Date(timeIntervalSince1970: Double(instance.ended_at!) / 1000))]
-                    }
-                    if self.instanes[formattedDate] != nil {
-                        self.instanes[formattedDate]!.append(instance)
-                    } else {
-                        self.instanes[formattedDate] = [instance]
-                    }
+                    
+                    self.JZevents[date, default: []].append(JZBaseEvent.init(id: "0", startDate: Data.convertToDate(instance.started_at!), endDate: Data.convertToDate(instance.ended_at!)))
+                    self.instanes[formattedDate, default: []].append(instance)
+
                     //print(formattedDate)
                     //print("appended")
                 }
@@ -165,39 +185,18 @@ class Data {
     
     func postShare(event: Event, completion: @escaping (String) -> Void ) {
         var params : Array<[String : Any]> = []
-        params.append([:])
-        params[0]["action"] = "READ"
-        params[0]["entity_id"] = event.id!
-        params[0]["entity_type"] = "EVENT"
+        let pattern = self.patterns[event.id!]!
+        params.append(["action" : "READ", "entity_id" : event.id!, "entity_type" : "EVENT"])
+        params.append(["action" : "UPDATE", "entity_id" : event.id!, "entity_type" : "EVENT"])
+        params.append(["action" : "DELETE", "entity_id" : event.id!, "entity_type" : "EVENT"])
+        params.append(["action" : "READ", "entity_id" : pattern.id!, "entity_type" : "PATTERN"])
+        params.append(["action" : "UPDATE", "entity_id" : pattern.id!, "entity_type" : "PATTERN"])
+        params.append(["action" : "DELETE", "entity_id" : pattern.id!, "entity_type" : "PATTERN"])
         
-        params.append([:])
-        params[1]["action"] = "UPDATE"
-        params[1]["entity_id"] = event.id!
-        params[1]["entity_type"] = "EVENT"
-        params.append([:])
-
-        params[2]["action"] = "DELETE"
-        params[2]["entity_id"] = event.id!
-        params[2]["entity_type"] = "EVENT"
-        params.append([:])
-
-        params[3]["action"] = "READ"
-        params[3]["entity_id"] = self.patterns[event.id!]!.id!
-        params[3]["entity_type"] = "PATTERN"
-        params.append([:])
-
-        params[4]["action"] = "UPDATE"
-        params[4]["entity_id"] = self.patterns[event.id!]!.id!
-        params[4]["entity_type"] = "PATTERN"
-        params.append([:])
-
-        params[5]["action"] = "DELETE"
-        params[5]["entity_id"] = self.patterns[event.id!]!.id!
-        params[5]["entity_type"] = "PATTERN"
-
         Api.postShare(parameters: params, completion:{ result in
             completion(result.components(separatedBy: "/").last!)
         })
+        
     }
     
     func getShare(token: String, completion: @escaping () -> Void ) {
@@ -278,215 +277,28 @@ class Pattern : JsonEncodable, Codable {
         if rrule?.isEmpty ?? true { return [] }
         var array : [Int] = []
         let rule = rrule!.components(separatedBy: ";")[1]
-        if rule.contains("MO") { array.append(0) }
-        if rule.contains("TU") { array.append(1) }
-        if rule.contains("WE") { array.append(2) }
-        if rule.contains("TH") { array.append(3) }
-        if rule.contains("FR") { array.append(4) }
-        if rule.contains("SA") { array.append(5) }
-        if rule.contains("SU") { array.append(6) }
-        print("rrule ", rrule)
+        for (key, value) in IndexByDay {
+            if rule.contains(key) {
+                array.append(value)
+            }
+        }
+        print("rrule ", rrule!)
         return array
     }
     
     func setRRuleWeekly(from days: [Int]){
-        var dayStr = ""
-        for i in days {
-            switch i {
-            case 0:
-                dayStr += "MO,"
-                
-            case 1:
-                dayStr += "TU,"
-
-            case 2:
-                dayStr += "WE,"
-
-            case 3:
-                dayStr += "TH,"
-
-            case 4:
-                dayStr += "FR,"
-
-            case 5:
-                dayStr += "SA,"
-
-            case 6:
-                dayStr += "SU,"
-                
-            case -1:
-                dayStr += "SU,"
-
-            default:
-                continue
+        var weekdays = ""
+        for index in days {
+            if let weekday = DayByIndex[index] {
+                weekdays += "\(weekday),"
             }
         }
-        if dayStr.isEmpty {
+        if weekdays.isEmpty {
             self.rrule = ""
         } else {
-            dayStr.popLast()
-            self.rrule = "FREQ=WEEKLY;BYDAY=\(dayStr);INTERVAL=1"
+            weekdays.popLast()
+            self.rrule = "FREQ=WEEKLY;BYDAY=\(weekdays);INTERVAL=1"
         }
     }
     
-}
-
-class Api {
-    
-    static let baseUrl = "http://frrcode.com:9040/api/v1"
-    static let headers = ["X-Firebase-Auth": "serega_mem"]
-    
-    static func buildUrl(type: objectType) -> String {
-        
-        var url = self.baseUrl
-        
-        switch type {
-        case .event:
-            url += "/events"
-        case .instance:
-            url += "/events/instances"
-        case .pattern:
-            url += "/patterns"
-        }
-        
-        return url
-    }
-    
-    static func get(type: objectType, completion: @escaping (Result<Any>) -> Void) {
-        
-        let url = self.buildUrl(type: type)
-        
-        Alamofire.request(url, headers: headers)
-            .validate()
-            .responseJSON() {  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    completion(.success(value))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-        }
-        
-    }
-    
-    static func patch(type: objectType, id: Int64, object: JsonEncodable, completion: @escaping (Result<Any>) -> Void) {
-        
-        var url = self.buildUrl(type: type)
-        url += "/" + String(id)
-        
-        Alamofire.request(url, method: .patch, parameters: object.encode(), encoding: JSONEncoding.default,
-                          headers: headers)
-            .validate()
-            .responseJSON() {  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    print("patch success")
-                    print(url)
-                    print(value)
-                    completion(.success(value))
-                case .failure(let error):
-                    print("patch failure")
-                    print(url)
-                    print(error)
-                    completion(.failure(error))
-                }
-        }
-        
-    }
-    
-    static func delete(type: objectType, id: Int64, completion: @escaping (Result<Any>) -> Void) {
-        
-        var url = self.buildUrl(type: type)
-        url += "/" + String(id)
-        
-        Alamofire.request(url, method: .delete, headers: headers)
-            .validate()
-            .responseJSON() {  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    print("delete success")
-                    print(url)
-                    print(value)
-                    completion(.success(value))
-                case .failure(let error):
-                    print("delete failure")
-                    print(url)
-                    print(error)
-                    completion(.failure(error))
-                }
-        }
-        
-    }
-    
-    static func post(type: objectType, object: JsonEncodable, completion: @escaping (Result<Any>) -> Void) {
-        
-        var url = self.buildUrl(type: type)
-        
-        if type == .pattern {
-            let pattern = object as! Pattern
-            url += "?event_id=" + String(pattern.event_id!)
-        }
-        
-        Alamofire.request(url, method: .post, parameters: object.encode(), encoding: JSONEncoding.default,
-                          headers: headers)
-            .validate()
-            .responseJSON() {  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    print("post success")
-                    print(url)
-                    completion(.success(value))
-                case .failure(let error):
-                    print("post failure")
-                    print(url)
-                    completion(.failure(error))
-                }
-        }
-    }
-    
-    static func postShare(parameters: Array<Any>, completion: @escaping (String) -> Void) {
-        var url = self.baseUrl
-        url += "/share"
-        
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(headers["X-Firebase-Auth"], forHTTPHeaderField: "X-Firebase-Auth")
-
-        
-        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters)
-        Alamofire.request(request)
-            .validate()
-            .responseString(encoding: .utf8){  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    print("post success")
-                    print(url)
-                    print(value)
-                    
-                    completion(value)
-                case .failure(let error):
-                    print("post failure")
-                    print(url)
-                    print(error)
-                }
-        }
-    }
-    
-    static func getShare(token: String, completion: @escaping (Result<Any>) -> Void) {
-        var url = self.baseUrl
-        url += "/share/" + token
-        Alamofire.request(url, headers: headers)
-            .validate()
-            .responseJSON() {  responseJSON in
-                switch responseJSON.result {
-                case .success(let value):
-                    completion(.success(value))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-        }
-        
-    }
-
 }

@@ -189,8 +189,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let instance = self.selectedDayInstances![indexPath.row]
         let event = self.data.events[instance.event_id!]!
         cell.detailTextLabel?.text = event.name
-        let from = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.started_at!) / 1000)
-        let to = Date(timeIntervalSince1970: Double(self.data.patterns[instance.event_id!]!.duration! + self.data.patterns[instance.event_id!]!.started_at!) / 1000)
+        let pattern = self.data.patterns[instance.event_id!]!
+        let from = Data.convertToDate(pattern.started_at!)
+        let to = Data.convertToDate(pattern.duration! + pattern.started_at!)
         let duration = Date.duration(from: from, to: to)
         cell.textLabel?.text = DateFormatter.localizedString(from: from, dateStyle: .none, timeStyle: .short) + " " + duration
         return cell
@@ -250,12 +251,12 @@ extension Date {
         let difference = NSCalendar.current.dateComponents(dayHour, from: from, to: to);
         
         
-        let minutes = "\(difference.minute ?? 0)" == "0" ? "" : "\(difference.minute ?? 0)" + "m"
-        let hours = "\(difference.hour ?? 0)" == "0" ? "" : "\(difference.hour ?? 0)" + "h"
+        let minutes = "\(difference.minute ?? 0)" == "0" ? "" : "\(difference.minute ?? 0)m"
+        let hours = "\(difference.hour ?? 0)" == "0" ? "" : "\(difference.hour ?? 0)h"
         let days = "\(difference.day ?? 0)d"
 
-        if let day = difference.day, day          > 0 { return days + " " + hours }
-        if let hour = difference.hour, hour       > 0 { return hours + " " + minutes}
+        if let day = difference.day, day          > 0 { return "\(days) \(hours)" }
+        if let hour = difference.hour, hour       > 0 { return "\(hours) \(minutes)"}
         if let minute = difference.minute, minute > 0 { return minutes }
 
         return ""

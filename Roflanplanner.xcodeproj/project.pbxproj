@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		844B793323858835007600C7 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844B793223858835007600C7 /* Api.swift */; };
 		8459201C236B237100A6962F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459201B236B237100A6962F /* EventTableViewController.swift */; };
 		84989B4E23840DEF0079A471 /* WeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84989B4D23840DEF0079A471 /* WeekViewController.swift */; };
 		84CEA6992236121F00890DD4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CEA6982236121F00890DD4 /* AppDelegate.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		0D0E3542C902494637688832 /* Pods-Roflanplanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roflanplanner.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner.debug.xcconfig"; sourceTree = "<group>"; };
+		844B793223858835007600C7 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		8459201B236B237100A6962F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
 		84989B4D23840DEF0079A471 /* WeekViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekViewController.swift; sourceTree = "<group>"; };
 		84CEA6952236121F00890DD4 /* Roflanplanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Roflanplanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +95,7 @@
 				84989B4D23840DEF0079A471 /* WeekViewController.swift */,
 				84CEA69A2236121F00890DD4 /* ViewController.swift */,
 				84FE8B9922E0CAC300B28399 /* Model.swift */,
+				844B793223858835007600C7 /* Api.swift */,
 				84CEA69C2236121F00890DD4 /* Main.storyboard */,
 				84CEA6A22236122100890DD4 /* Assets.xcassets */,
 				84CEA6A42236122100890DD4 /* LaunchScreen.storyboard */,
@@ -220,6 +223,7 @@
 				84CEA69B2236121F00890DD4 /* ViewController.swift in Sources */,
 				84CEA6992236121F00890DD4 /* AppDelegate.swift in Sources */,
 				84FE8B9A22E0CAC300B28399 /* Model.swift in Sources */,
+				844B793323858835007600C7 /* Api.swift in Sources */,
 				8459201C236B237100A6962F /* EventTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

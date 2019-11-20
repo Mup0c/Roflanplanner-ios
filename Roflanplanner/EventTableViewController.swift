@@ -71,8 +71,8 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             }
         }
 
-        let weekday = Calendar.current.component(.weekday, from: datePickerStart.date) - 2
-        print("HEHE: ", weekday)
+        let weekday = (Calendar.current.component(.weekday, from: datePickerStart.date) + 5) % 7
+        print("weekday_index: ", weekday)
         if !weekdays.isEmpty && weekdays.firstIndex(of: weekday) == nil{
             weekdays.append(weekday)
         }
@@ -102,9 +102,9 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             eventDetailsTextView.text = event?.details
             
             
-            datePickerStart.date = Date(timeIntervalSince1970: (Double(pattern.started_at!) / 1000))
-            datePickerEnd.date = Date(timeIntervalSince1970: (Double(pattern.started_at! + pattern.duration!) / 1000))
-            datePickerDuration.date = Date(timeIntervalSince1970: (Double(pattern.ended_at!) / 1000))
+            datePickerStart.date = Data.convertToDate(pattern.started_at!)
+            datePickerEnd.date = Data.convertToDate(pattern.started_at! + pattern.duration!)
+            datePickerDuration.date = Data.convertToDate(pattern.ended_at!)
 
             dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
             dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
@@ -176,13 +176,13 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == "Unnamed" && textView.tag == 2 {
-            textView.text = nil
+            textView.text = ""
         }
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty && textView.tag == 2 {
-            textView.text = "Unnamed"
+            textView.text = "Unnamеd"
         }
     }
     
