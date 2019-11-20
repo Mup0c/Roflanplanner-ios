@@ -19,15 +19,12 @@ class WeekViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         calendar.setupCalendar(numOfDays: 7,
         setDate: Date(),
         allEvents: events,
         scrollType: .pageScroll,
         firstDayOfWeek: .Monday)
-
-        // Do any additional setup after loading the view.
+        
     }
     
     @IBAction func backClicked(_ sender: Any) {

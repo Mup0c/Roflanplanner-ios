@@ -105,10 +105,6 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             datePickerStart.date = Data.convertToDate(pattern.started_at!)
             datePickerEnd.date = Data.convertToDate(pattern.started_at! + pattern.duration!)
             datePickerDuration.date = Data.convertToDate(pattern.ended_at!)
-
-            dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
-            dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
-            dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
             
             if eventDetailsTextView.text.isEmpty {
                 eventDetailsTextView.text = "No details"
@@ -129,9 +125,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             editButton.title = "Done"
             
             
-            dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
-            dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
-            dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
+            
             eventNameCell.isHidden = false
             eventNameTextView.isEditable = true
             eventDetailsTextView.isEditable = true
@@ -145,6 +139,10 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             eventDetailsTextView.text = event?.details
 
         }
+        dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
+        dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
+        dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
+        
         
     }
     
@@ -209,83 +207,23 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     @objc func dateChanged(datePickerStart: UIDatePicker) {
         datePickerEnd.date = max(datePickerEnd.date, datePickerStart.date)
         datePickerDuration.date = max(datePickerStart.date, datePickerDuration.date)
-        dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
-        dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
+        refreshAppearance()
 
     }
     
     @objc func dateChanged(datePickerEnd: UIDatePicker) {
         datePickerStart.date = min(datePickerStart.date, datePickerEnd.date)
-        dateTextStart.text = DateFormatter.localizedString(from: datePickerStart.date, dateStyle: .full, timeStyle: .short)
-        dateTextEnd.text = DateFormatter.localizedString(from: datePickerEnd.date, dateStyle: .full, timeStyle: .short)
+        refreshAppearance()
     }
     
     @objc func dateChanged(datePickerDuration: UIDatePicker) {
         datePickerDuration.date = max(datePickerStart.date, datePickerDuration.date)
-        dateTextDuration.text = DateFormatter.localizedString(from: datePickerDuration.date, dateStyle: .full, timeStyle: .none)
+        refreshAppearance()
     }
     
     func textViewDidChange(_ textView: UITextView) {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
-
-    // MARK: - Table view data source
-
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    
 }

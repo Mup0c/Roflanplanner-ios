@@ -14,7 +14,6 @@ import Firebase
 class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet var calendar: FSCalendar!
-    //fileprivate weak var calendar: FSCalendar!
     @IBOutlet var calendarHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet var dayTable: UITableView!
@@ -52,20 +51,11 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
         dayTable.refreshControl = refreshControl
-        //calendar.placeholderType = FSCalendarPlaceholderType.fillSixRows
-        //calendar.adjustsBoundingRectWhenChangingMonths=true
         self.refreshData()
-        //calendar.adjustMonthPosition()
-        // Do any additional setup after loading the view, typically from a nib.
         
-        //let calendar = FSCalendar(frame: CGRect(x: 0, y: 0, width: 320, height: 300))
-        //calendar.dataSource = self
-        //calendar.delegate = self
-        //view.addSubview(calendar)
-        //self.calendar = calendar
-
     }
     
     @IBAction func clickedChangeView(_ sender: Any) {
