@@ -35,6 +35,20 @@ let IndexByDay = [
     "SU" : 6,
 ]
 
+let freqByIndex = [
+    1 : "DAILY",
+    2 : "WEEKLY",
+    3 : "MONTHLY",
+    4 : "YEARLY",
+]
+
+let IndexByFreq = [
+    "DAILY"  : 1,
+    "WEEKLY" : 2,
+    "MONTHLY": 3,
+    "YEARLY" : 4,
+]
+
 class Data {
     
     var events: [Int64:Event] = [:]
@@ -288,7 +302,7 @@ class Pattern : JsonEncodable, Codable {
         return array
     }
     
-    func setRRuleWeekly(from days: [Int]){
+    func setRRuleWeekly(from days: [Int], interval: Int){
         var weekdays = ""
         for index in days {
             if let weekday = DayByIndex[index] {
@@ -299,8 +313,36 @@ class Pattern : JsonEncodable, Codable {
             self.rrule = ""
         } else {
             weekdays.popLast()
-            self.rrule = "FREQ=WEEKLY;BYDAY=\(weekdays);INTERVAL=1"
+            self.rrule = "FREQ=WEEKLY;BYDAY=\(weekdays);INTERVAL=\(interval)"
         }
+    }
+    
+    func getFreq() -> Int {
+        if let rrule = self.rrule {
+            let rules = rrule.components(separatedBy: ";")
+            for rule in rules {
+                if rule.contains("FREQ=") {
+                    let freq = String(rule.dropFirst(5))
+                    print("freq:", freq)
+                    return(IndexByFreq[freq]!)
+                }
+            }
+        }
+        return 0
+    }
+    
+    func getInterval() -> Int {
+        if let rrule = self.rrule {
+            let rules = rrule.components(separatedBy: ";")
+            for rule in rules {
+                if rule.contains("INTERVAL=") {
+                    let interval = String(rule.dropFirst(9))
+                    print("interval:", interval)
+                    return(Int(interval)!)
+                }
+            }
+        }
+        return 1
     }
     
 }
