@@ -79,7 +79,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
     func setRrule() {
         switch repeatTypeSelector.selectedSegmentIndex {
         case 1,3,4:
-            pattern.rrule = "FREQ=\(freqByIndex[repeatTypeSelector.selectedSegmentIndex]!);INTERVAL=\(Int(intervalStepper.value))"
+            pattern.rrule = "FREQ=\(freqByIndex[repeatTypeSelector.selectedSegmentIndex]);INTERVAL=\(Int(intervalStepper.value))"
         case 2:
             var weekdays : Array<Int> = []
             for button in weekdayButtons {
@@ -119,7 +119,7 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         
         let completion = {
             let navCtrlPresCtrl = self.navigationController!.presentationController!
-            if let viewCtrl = navCtrlPresCtrl.delegate as? ViewController {
+            if let viewCtrl = navCtrlPresCtrl.delegate as? MainViewController {
                 print("reloading via EventTableViewController")
                 viewCtrl.calendar.select(self.datePickerStart.date)
                 viewCtrl.refreshData() {
@@ -129,9 +129,9 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
         }
         
         if willCreateNewEvent {
-            Data.postEvent(event: event, pattern: pattern, completion: completion)
+            CalendarModel.postEvent(event: event, pattern: pattern, completion: completion)
         } else {
-            Data.patchEvent(event: event, pattern: pattern, completion: completion)
+            CalendarModel.patchEvent(event: event, pattern: pattern, completion: completion)
         }
         
     }
@@ -144,9 +144,9 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
             eventNameTextView.text = event?.name
             eventDetailsTextView.text = event?.details
             
-            datePickerStart.date = Data.convertToDate(pattern.started_at!)
-            datePickerEnd.date = Data.convertToDate(pattern.started_at! + pattern.duration!)
-            datePickerDuration.date = Data.convertToDate(pattern.ended_at!)
+            datePickerStart.date = CalendarModel.convertToDate(pattern.started_at!)
+            datePickerEnd.date = CalendarModel.convertToDate(pattern.started_at! + pattern.duration!)
+            datePickerDuration.date = CalendarModel.convertToDate(pattern.ended_at!)
             
             if eventDetailsTextView.text.isEmpty {
                 eventDetailsTextView.text = "No details"
@@ -231,8 +231,6 @@ class EventTableViewController: UITableViewController, UITextViewDelegate {
 
         }
         
-        
-        //TODO: INIT STEPPER and segmented control
         refreshAppearance()
         print("Event table view loaded")
     }

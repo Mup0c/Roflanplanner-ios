@@ -11,7 +11,7 @@ import FSCalendar
 import CalendarKit
 import Firebase
 
-class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
+class MainViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     @IBOutlet var calendar: FSCalendar!
     @IBOutlet var calendarHeightConstraint: NSLayoutConstraint!
@@ -21,7 +21,7 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     
     var selectedDayInstances : [EventInstance]?
     var selectedInstance : EventInstance!
-    var data = Data()
+    var model = CalendarModel()
     var refreshControl = UIRefreshControl()
 
     @objc func objcRefreshData() {
@@ -30,9 +30,9 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     
     func refreshData(completion: @escaping () -> Void = {}) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        self.data.fetchEvents() {
-            self.data.fetchPatterns {
-                self.data.fetchInstances {
+        self.model.fetchEvents() {
+            self.model.fetchPatterns() {
+                self.model.fetchInstances() {
                     let date = self.calendar.selectedDate ?? self.calendar.today!
                     self.refreshSelectedDayInstances(date: date)
                     self.calendar.reloadData()
@@ -52,7 +52,7 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
         let format = DateFormatter()
         format.dateFormat = "yyyyMMdd"
         let formattedDate = Int(format.string(from: date))!
-        self.selectedDayInstances = self.data.instanes[formattedDate]?.sorted(by: { $0.started_at! < $1.started_at! })
+        self.selectedDayInstances = self.model.instanes[formattedDate]?.sorted(by: { $0.started_at! < $1.started_at! })
         
     }
     
@@ -83,8 +83,8 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
             segue.destination.presentationController?.delegate = self;
             let navController = segue.destination as! UINavigationController
             let eventTableView = navController.topViewController as! EventTableViewController
-            eventTableView.event = self.data.events[self.selectedInstance.event_id!]!
-            eventTableView.pattern = self.data.patterns[self.selectedInstance.event_id!]!
+            eventTableView.event = self.model.events[self.selectedInstance.event_id!]!
+            eventTableView.pattern = self.model.patterns[self.selectedInstance.event_id!]!
             
         }
         
@@ -98,14 +98,12 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
 
         }
         
-        if segue.identifier == "toWeekViewSegue" {
+        if segue.identifier == "toWeekSegue" {
             print("week...")
-
             segue.destination.presentationController?.delegate = self;
             let weekView = segue.destination as! WeekViewController
-            weekView.JZEvents = self.data.JZevents
-            weekView.str = "kek"
-            print(weekView.JZEvents!)
+            weekView.viewModel.initEvents(from: self.model)
+            weekView.kek = "BEFORE AFTER"
             
         }
         
@@ -130,7 +128,7 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
     func okHandler(alert: UIAlertAction) {
         if let token = tokenText?.text {
             print(token)
-            self.data.getShare(token: token) {
+            self.model.getShare(token: token) {
                 self.refreshData()
             }
         }
@@ -139,13 +137,13 @@ class ViewController: UIViewController, UIAdaptivePresentationControllerDelegate
 }
 
 
-extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
+extension MainViewController: FSCalendarDataSource, FSCalendarDelegate {
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         
         let format = DateFormatter()
         format.dateFormat = "yyyyMMdd"
         let formattedDate = Int(format.string(from: date))!
-        if let val = self.data.instanes[formattedDate] {
+        if let val = self.model.instanes[formattedDate] {
             return val.count
         }
         return 0
@@ -166,7 +164,7 @@ extension ViewController: FSCalendarDataSource, FSCalendarDelegate {
     
 }
 
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
+extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
@@ -180,11 +178,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell", for: indexPath)
         let instance = self.selectedDayInstances![indexPath.row]
-        let event = self.data.events[instance.event_id!]!
+        let event = self.model.events[instance.event_id!]!
         cell.detailTextLabel?.text = event.name
-        let pattern = self.data.patterns[instance.event_id!]!
-        let from = Data.convertToDate(pattern.started_at!)
-        let to = Data.convertToDate(pattern.duration! + pattern.started_at!)
+        let pattern = self.model.patterns[instance.event_id!]!
+        let from = CalendarModel.convertToDate(pattern.started_at!)
+        let to = CalendarModel.convertToDate(pattern.duration! + pattern.started_at!)
         let duration = Date.duration(from: from, to: to)
         cell.textLabel?.text = DateFormatter.localizedString(from: from, dateStyle: .none, timeStyle: .short) + " " + duration
         return cell
@@ -206,7 +204,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let TrashAction = UIContextualAction(style: .destructive, title:  "Delete", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("delete action ...")
             print(indexPath.row)
-            self.data.deleteEvent(eventInstance: self.selectedDayInstances![indexPath.row]) { 
+            self.model.deleteEvent(eventInstance: self.selectedDayInstances![indexPath.row]) { 
                 self.refreshData()
             }
             self.selectedDayInstances!.remove(at: indexPath.row)
@@ -218,7 +216,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let ShareAction = UIContextualAction(style: .normal, title:  "Share", handler: { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
             print("share action ...")
             print(indexPath.row)
-            self.data.postShare(event: self.data.events[self.selectedDayInstances![indexPath.row].event_id!]!) {
+            self.model.postShare(event: self.model.events[self.selectedDayInstances![indexPath.row].event_id!]!) {
                 message in
                 let objectsToShare = [message] as [Any]
                 let activityVC = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)

@@ -15,15 +15,7 @@ enum objectType {
     case pattern
 }
 
-let DayByIndex = [
-    0 : "MO",
-    1 : "TU",
-    2 : "WE",
-    3 : "TH",
-    4 : "FR",
-    5 : "SA",
-    6 : "SU",
-]
+let DayByIndex = [ "MO", "TU", "WE", "TH", "FR", "SA", "SU"]
 
 let IndexByDay = [
     "MO" : 0,
@@ -35,12 +27,7 @@ let IndexByDay = [
     "SU" : 6,
 ]
 
-let freqByIndex = [
-    1 : "DAILY",
-    2 : "WEEKLY",
-    3 : "MONTHLY",
-    4 : "YEARLY",
-]
+let freqByIndex = [ "NONE", "DAILY", "WEEKLY", "MONTHLY", "YEARLY"]
 
 let IndexByFreq = [
     "DAILY"  : 1,
@@ -49,7 +36,7 @@ let IndexByFreq = [
     "YEARLY" : 4,
 ]
 
-class Data {
+class CalendarModel {
     
     var events: [Int64:Event] = [:]
     var instanes: [Int:[EventInstance]] = [:]
@@ -103,12 +90,12 @@ class Data {
                     let jsonInstance = try! JSONSerialization.data(withJSONObject: jsonInstance)
                     let decoder = JSONDecoder()
                     let instance = try! decoder.decode(EventInstance.self, from: jsonInstance)
-                    let date = Data.convertToDate(instance.started_at!)
+                    let date = CalendarModel.convertToDate(instance.started_at!)
                     let format = DateFormatter()
                     format.dateFormat = "yyyyMMdd"
                     let formattedDate = Int(format.string(from: date))!
                     
-                    self.JZevents[date, default: []].append(JZBaseEvent.init(id: "0", startDate: Data.convertToDate(instance.started_at!), endDate: Data.convertToDate(instance.ended_at!)))
+                    self.JZevents[date, default: []].append(JZBaseEvent.init(id: "0", startDate: CalendarModel.convertToDate(instance.started_at!), endDate: CalendarModel.convertToDate(instance.ended_at!)))
                     self.instanes[formattedDate, default: []].append(instance)
 
                     //print(formattedDate)
@@ -305,9 +292,7 @@ class Pattern : JsonEncodable, Codable {
     func setRRuleWeekly(from days: [Int], interval: Int){
         var weekdays = ""
         for index in days {
-            if let weekday = DayByIndex[index] {
-                weekdays += "\(weekday),"
-            }
+            weekdays += "\(DayByIndex[index]),"
         }
         if weekdays.isEmpty {
             self.rrule = ""

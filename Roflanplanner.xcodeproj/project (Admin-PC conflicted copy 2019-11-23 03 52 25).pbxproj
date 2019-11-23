@@ -7,14 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		843629D72388355600C9B67B /* WeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629B92388355600C9B67B /* WeekView.swift */; };
-		843629D82388355600C9B67B /* WeekEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843629BA2388355600C9B67B /* WeekEventCell.xib */; };
-		843629D92388355600C9B67B /* WeekEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BB2388355600C9B67B /* WeekEventCell.swift */; };
-		843629DA2388355600C9B67B /* WeekViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BC2388355600C9B67B /* WeekViewModel.swift */; };
-		843629DB2388355600C9B67B /* WeekViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BD2388355600C9B67B /* WeekViewController.swift */; };
-		843629DC2388355600C9B67B /* WeekEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BE2388355600C9B67B /* WeekEvent.swift */; };
+		843629D72388355600C9B67B /* LongPressWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629B92388355600C9B67B /* LongPressWeekView.swift */; };
+		843629D82388355600C9B67B /* LongPressEventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843629BA2388355600C9B67B /* LongPressEventCell.xib */; };
+		843629D92388355600C9B67B /* LongPressEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BB2388355600C9B67B /* LongPressEventCell.swift */; };
+		843629DA2388355600C9B67B /* AllDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BC2388355600C9B67B /* AllDayViewModel.swift */; };
+		843629DB2388355600C9B67B /* LongPressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BD2388355600C9B67B /* LongPressViewController.swift */; };
+		843629DC2388355600C9B67B /* AllDayEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629BE2388355600C9B67B /* AllDayEvent.swift */; };
 		843629E12388355600C9B67B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629C42388355600C9B67B /* Extensions.swift */; };
 		843629E22388355600C9B67B /* ToastUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629C52388355600C9B67B /* ToastUtil.swift */; };
+		843629F3238847AF00C9B67B /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843629F1238847AF00C9B67B /* EventCell.swift */; };
+		843629F4238847AF00C9B67B /* EventCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843629F2238847AF00C9B67B /* EventCell.xib */; };
 		843629F8238854BF00C9B67B /* loading.png in Resources */ = {isa = PBXBuildFile; fileRef = 843629F7238854BF00C9B67B /* loading.png */; };
 		844B793323858835007600C7 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 844B793223858835007600C7 /* Api.swift */; };
 		8459201C236B237100A6962F /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459201B236B237100A6962F /* EventTableViewController.swift */; };
@@ -31,14 +33,16 @@
 
 /* Begin PBXFileReference section */
 		0D0E3542C902494637688832 /* Pods-Roflanplanner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Roflanplanner.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Roflanplanner/Pods-Roflanplanner.debug.xcconfig"; sourceTree = "<group>"; };
-		843629B92388355600C9B67B /* WeekView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekView.swift; sourceTree = "<group>"; };
-		843629BA2388355600C9B67B /* WeekEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WeekEventCell.xib; sourceTree = "<group>"; };
-		843629BB2388355600C9B67B /* WeekEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekEventCell.swift; sourceTree = "<group>"; };
-		843629BC2388355600C9B67B /* WeekViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekViewModel.swift; sourceTree = "<group>"; };
-		843629BD2388355600C9B67B /* WeekViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekViewController.swift; sourceTree = "<group>"; };
-		843629BE2388355600C9B67B /* WeekEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekEvent.swift; sourceTree = "<group>"; };
+		843629B92388355600C9B67B /* LongPressWeekView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressWeekView.swift; sourceTree = "<group>"; };
+		843629BA2388355600C9B67B /* LongPressEventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LongPressEventCell.xib; sourceTree = "<group>"; };
+		843629BB2388355600C9B67B /* LongPressEventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressEventCell.swift; sourceTree = "<group>"; };
+		843629BC2388355600C9B67B /* AllDayViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllDayViewModel.swift; sourceTree = "<group>"; };
+		843629BD2388355600C9B67B /* LongPressViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LongPressViewController.swift; sourceTree = "<group>"; };
+		843629BE2388355600C9B67B /* AllDayEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllDayEvent.swift; sourceTree = "<group>"; };
 		843629C42388355600C9B67B /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		843629C52388355600C9B67B /* ToastUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastUtil.swift; sourceTree = "<group>"; };
+		843629F1238847AF00C9B67B /* EventCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		843629F2238847AF00C9B67B /* EventCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventCell.xib; sourceTree = "<group>"; };
 		843629F7238854BF00C9B67B /* loading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loading.png; sourceTree = "<group>"; };
 		844B793223858835007600C7 /* Api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		8459201B236B237100A6962F /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
@@ -88,12 +92,14 @@
 		843629B72388355600C9B67B /* WeekView */ = {
 			isa = PBXGroup;
 			children = (
-				843629BD2388355600C9B67B /* WeekViewController.swift */,
-				843629BC2388355600C9B67B /* WeekViewModel.swift */,
-				843629B92388355600C9B67B /* WeekView.swift */,
-				843629BE2388355600C9B67B /* WeekEvent.swift */,
-				843629BB2388355600C9B67B /* WeekEventCell.swift */,
-				843629BA2388355600C9B67B /* WeekEventCell.xib */,
+				843629F1238847AF00C9B67B /* EventCell.swift */,
+				843629F2238847AF00C9B67B /* EventCell.xib */,
+				843629B92388355600C9B67B /* LongPressWeekView.swift */,
+				843629BA2388355600C9B67B /* LongPressEventCell.xib */,
+				843629BE2388355600C9B67B /* AllDayEvent.swift */,
+				843629BB2388355600C9B67B /* LongPressEventCell.swift */,
+				843629BC2388355600C9B67B /* AllDayViewModel.swift */,
+				843629BD2388355600C9B67B /* LongPressViewController.swift */,
 				843629C32388355600C9B67B /* Utils */,
 			);
 			name = WeekView;
@@ -112,7 +118,6 @@
 		843629F92388554A00C9B67B /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				84CEA69C2236121F00890DD4 /* Main.storyboard */,
 				843629B72388355600C9B67B /* WeekView */,
 				8459201B236B237100A6962F /* EventTableViewController.swift */,
 				84CEA69A2236121F00890DD4 /* MainViewController.swift */,
@@ -126,11 +131,6 @@
 		843629FA238855CD00C9B67B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				84CEA6A22236122100890DD4 /* Assets.xcassets */,
-				84CEA6A42236122100890DD4 /* LaunchScreen.storyboard */,
-				84FE8B9522DEC91300B28399 /* GoogleService-Info.plist */,
-				84CEA69F2236121F00890DD4 /* Roflanplanner.xcdatamodeld */,
-				843629F7238854BF00C9B67B /* loading.png */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -156,9 +156,15 @@
 		84CEA6972236121F00890DD4 /* Roflanplanner */ = {
 			isa = PBXGroup;
 			children = (
-				843629F92388554A00C9B67B /* Source */,
 				843629FA238855CD00C9B67B /* Supporting Files */,
+				843629F92388554A00C9B67B /* Source */,
+				84CEA69C2236121F00890DD4 /* Main.storyboard */,
+				84CEA6A22236122100890DD4 /* Assets.xcassets */,
+				84CEA6A42236122100890DD4 /* LaunchScreen.storyboard */,
 				84CEA6A72236122100890DD4 /* Info.plist */,
+				84FE8B9522DEC91300B28399 /* GoogleService-Info.plist */,
+				84CEA69F2236121F00890DD4 /* Roflanplanner.xcdatamodeld */,
+				843629F7238854BF00C9B67B /* loading.png */,
 			);
 			path = Roflanplanner;
 			sourceTree = "<group>";
@@ -224,9 +230,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				84CEA6A62236122100890DD4 /* LaunchScreen.storyboard in Resources */,
-				843629D82388355600C9B67B /* WeekEventCell.xib in Resources */,
+				843629D82388355600C9B67B /* LongPressEventCell.xib in Resources */,
 				84FE8B9622DEC91400B28399 /* GoogleService-Info.plist in Resources */,
 				84CEA6A32236122100890DD4 /* Assets.xcassets in Resources */,
+				843629F4238847AF00C9B67B /* EventCell.xib in Resources */,
 				84CEA69E2236121F00890DD4 /* Main.storyboard in Resources */,
 				843629F8238854BF00C9B67B /* loading.png in Resources */,
 			);
@@ -280,15 +287,16 @@
 				84CEA6A12236121F00890DD4 /* Roflanplanner.xcdatamodeld in Sources */,
 				84CEA69B2236121F00890DD4 /* MainViewController.swift in Sources */,
 				843629E22388355600C9B67B /* ToastUtil.swift in Sources */,
-				843629D92388355600C9B67B /* WeekEventCell.swift in Sources */,
-				843629DA2388355600C9B67B /* WeekViewModel.swift in Sources */,
-				843629DB2388355600C9B67B /* WeekViewController.swift in Sources */,
-				843629D72388355600C9B67B /* WeekView.swift in Sources */,
+				843629D92388355600C9B67B /* LongPressEventCell.swift in Sources */,
+				843629DA2388355600C9B67B /* AllDayViewModel.swift in Sources */,
+				843629DB2388355600C9B67B /* LongPressViewController.swift in Sources */,
+				843629F3238847AF00C9B67B /* EventCell.swift in Sources */,
+				843629D72388355600C9B67B /* LongPressWeekView.swift in Sources */,
 				84CEA6992236121F00890DD4 /* AppDelegate.swift in Sources */,
 				843629E12388355600C9B67B /* Extensions.swift in Sources */,
 				84FE8B9A22E0CAC300B28399 /* Model.swift in Sources */,
 				844B793323858835007600C7 /* Api.swift in Sources */,
-				843629DC2388355600C9B67B /* WeekEvent.swift in Sources */,
+				843629DC2388355600C9B67B /* AllDayEvent.swift in Sources */,
 				8459201C236B237100A6962F /* EventTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

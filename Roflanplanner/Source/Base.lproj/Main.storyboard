@@ -11,7 +11,7 @@
         <!--Data Source-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Roflanplanner" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="MainViewController" customModule="Roflanplanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -38,15 +38,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <items>
                                     <navigationItem title="Roflanplanner" id="lr1-Sz-wsZ">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="gH9-a3-Dh9">
-                                            <button key="customView" hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zqY-AH-cOp">
-                                                <rect key="frame" x="16" y="7" width="39" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Week"/>
-                                                <connections>
-                                                    <segue destination="koB-ay-HZH" kind="presentation" identifier="toWeekViewSegue" modalPresentationStyle="fullScreen" id="8Na-zb-daA"/>
-                                                </connections>
-                                            </button>
+                                        <barButtonItem key="leftBarButtonItem" title="Week" id="tUY-z6-q7G">
+                                            <connections>
+                                                <segue destination="koB-ay-HZH" kind="presentation" identifier="toWeekSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="1Qp-Jh-593"/>
+                                            </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Shrink" id="5Nm-VZ-Lpe">
                                             <connections>
@@ -109,6 +104,7 @@
                             </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="hkd-Ra-w0y" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="44" id="4k9-l1-ygQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="HiJ-hy-O9Z" secondAttribute="bottom" constant="603" id="BEl-nR-k8c"/>
@@ -147,36 +143,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Muh-b4-kvf" customClass="JZBaseWeekView" customModule="JZCalendarWeekView">
-                                <rect key="frame" x="16" y="57" width="343" height="610"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Muh-b4-kvf" customClass="WeekView" customModule="Roflanplanner" customModuleProvider="target">
+                                <rect key="frame" x="16" y="64" width="343" height="603"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GsE-Dq-S4y">
-                                <rect key="frame" x="0.0" y="13" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Week view" id="1FW-lC-tBq">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="c4f-Yq-CuD">
-                                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="cqS-JQ-bnJ">
-                                                <rect key="frame" x="16" y="7" width="34" height="30"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" title="Back"/>
-                                                <connections>
-                                                    <action selector="backClicked:" destination="koB-ay-HZH" eventType="touchUpInside" id="d4B-Oz-yvQ"/>
-                                                </connections>
-                                            </button>
+                                        <barButtonItem key="leftBarButtonItem" title="Month" id="zMJ-kb-6oQ">
+                                            <connections>
+                                                <action selector="backClicked:" destination="koB-ay-HZH" id="SsF-c3-9Bh"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="WIX-n0-nTj"/>
                     </view>
                     <navigationItem key="navigationItem" id="7c0-Pe-ykD"/>
                     <connections>
-                        <outlet property="calendar" destination="Muh-b4-kvf" id="aKW-Lx-g3l"/>
+                        <outlet property="calendarWeekView" destination="Muh-b4-kvf" id="XLc-T2-cwi"/>
+                        <outlet property="navItem" destination="1FW-lC-tBq" id="agY-47-Jet"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PVN-Aj-aND" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
